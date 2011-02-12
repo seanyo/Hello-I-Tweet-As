@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<title>Hello, I Tweet As</title>
+
+<style>
+
+#top {
+width: 300px;
+height: 65px;
+background-color: red;
+border-radius: 25px 25px 0px 0px;
+-moz-border-radius: 25px 25px 0px 0px;
+-webkit-border-bottom-right-radius: 0px;
+-webkit-border-bottom-left-radius: 0px;
+}
+
+#middle {
+width: 298px;
+height: 110px;
+border: 1px solid red;
+}
+
+#bottom {
+width: 300px;
+height: 20px;
+background-color: red;
+border-radius: 0px 0px 50px 50px;
+-moz-border-radius: 0px 0px 50px 50px;
+-webkit-border-bottom-right-radius: 50px;
+-webkit-border-bottom-left-radius: 50px;
+}
+
+h1 {
+font-family: Arial, sans-serif;
+font-size: 36px;
+text-align: center;
+color: white;
+}
+
+.subtitle {
+font-family: Arial, sans-serif;
+font-size: 18px;
+text-align: center;
+color: white;
+margin-top: -25px;
+}
+
+div.left{
+float: left;
+padding: 10px;
+width: 20%;
+}
+
+div.right{
+float: right;
+padding: 10px;
+width: 65%;
+}
+
+.twitterID{
+font-family: Arial, sans-serif;
+font-size: 24px;
+text-align: center;
+color: black;
+font-weight: bold;
+margin: 2px;
+margin-top: -10px;
+}
+
+.name{
+font-family: Arial, sans-serif;
+font-size: 12px;
+margin: 2px;
+text-align: center;
+margin-bottom: 15px;
+}
+
+.description{
+font-family: Arial, sans-serif;
+font-size: 8px;
+font-style: italic; 
+text-align: center;
+margin: 2px;
+}
+
+</style>
+
+<script src="http://code.jquery.com/jquery-1.5.js"></script>
+<script type="text/javascript" src="jquery.url.min.js"></script>
+
+</head>
+
+<body>
+
+<div id="top">
+<h1>HELLO</h1>
+<p class="subtitle">I Tweet As</p>
+</div>
+
+<div id="middle">
+
+	<div class="left">
+	</div>
+	
+	<div class="right">
+	<p class="twitterID"></p>
+	<p class="name"></p>
+	<p class="description"></p>
+	</div>
+		
+</div>
+
+<div id="bottom">
+</div>
+
+<script> 
+var tweeturl = "http://twitter.com/status/user_timeline/"+$.url.param("tid")+".json?count=1&callback=?";
+$(document).ready(function(){
+  $.getJSON(tweeturl, function(data){
+    $.each(data, function(i, item) {
+      var userPicURL = item.user.profile_image_url.replace("normal", "bigger");
+	  var screenName = item.user.screen_name;
+	  var name = item.user.name;
+	  var description = item.user.description;
+	  var location = item.user.location;
+	  var userPic='<img width=75 height=75 src="'+userPicURL+'" />';
+	  $('div.left').html(userPic);
+	  $('p.twitterID').html("@"+screenName);
+	  $('p.name').html(name+" "+location);
+	  $('p.description').html(description);
+
+	  });
+  });
+
+  
+  });
+
+
+</script> 
+
+</body>
+</html>
+

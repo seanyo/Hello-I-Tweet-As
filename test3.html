@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-1.5.js"></script>
+</head>
+<body>
+<div id="userPic">
+<p>Heeru</p>
+</div>
+
+    <script>
+  $(document).ready(function () {
+var twitterJson="http://api.twitter.com/1/users/show/seanyo.json";
+	$.getJSON(twitterJson,function(){
+		$(json.results).each(function(){
+			var userPic='<img alt="'+this.from_user+' on Twitter" src="'+this.profile_image_url+'" />';
+			
+			});
+	});
+  
+  
+  $("#userPic").append(userPic);
+});
+  </script>
+</body>
+</html>
