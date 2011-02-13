@@ -3,20 +3,20 @@
 //
 // TODO: Prevent this from re-parsing the URL each time.
 function getParam(key) {
-  searchString = window.location.search;
+  var searchString = window.location.search;
 
   // Remove the leading '?'
   if (searchString.match(/^\?/)) {
     searchString = searchString.slice(1);
   }
 
-  params = {};
+  var params = {};
 
   // There's got to be a better way... but this works for now.
   searchString.split("&").forEach(
     function(paramString) {
       if (paramString != undefined) {
-        parts = paramString.split("=");
+        var parts = paramString.split("=");
         params[parts[0]] = parts[1];
       }
     });
