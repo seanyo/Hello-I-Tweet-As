@@ -26,23 +26,20 @@ function getParam(key) {
 
 
 var twitterID = getParam("tid");
-var tweeturl = "http://twitter.com/status/user_timeline/" +
-  twitterID + ".json?count=1&callback=?";
+var tweeturl = "http://api.twitter.com/1/users/show/" +
+  twitterID + ".json?callback=?";
 
-$(document).ready(function(){
+$(document).ready(function() {
   $.getJSON(tweeturl, function(data){
-    $.each(data, function(i, item) {
-      var userPicURL =
-        item.user.profile_image_url.replace("normal", "bigger");
-      var screenName = item.user.screen_name;
-      var name = item.user.name;
-      var description = item.user.description;
-      var location = item.user.location;
-      var userPic='<img width=75 height=75 src="'+userPicURL+'" />';
-      $('div.left').html(userPic);
-      $('p.twitterID').html("@"+screenName);
-      $('p.name').html(name+" "+location);
-      $('p.description').html(description);
-    });
+    var userPicURL = data.profile_image_url.replace("normal", "bigger");
+    var screenName = data.screen_name;
+    var name = data.name;
+    var description = data.description;
+    var location = data.location;
+    var userPic='<img width=75 height=75 src="'+userPicURL+'" />';
+    $('div.left').html(userPic);
+    $('p.twitterID').html("@"+screenName);
+    $('p.name').html(name+" "+location);
+    $('p.description').html(description);
   });
 });
