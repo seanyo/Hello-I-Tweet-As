@@ -1,4 +1,34 @@
-var tweeturl = "http://twitter.com/status/user_timeline/"+$.url.param("tid")+".json?count=1&callback=?";
+// Retrieve the value of a given URL parameter. Return undefined if the
+// parameter does not exist.
+//
+// TODO: Prevent this from re-parsing the URL each time.
+function getParam(key) {
+    searchString = window.location.search;
+
+    // Remove the leading '?'
+    if (searchString.match(/^\?/)) {
+        searchString = searchString.slice(1);
+    }
+
+    params = {};
+
+    // There's got to be a better way... but this works for now.
+    searchString.split("&").forEach(
+        function(paramString) {
+            if (paramString != undefined) {
+                parts = paramString.split("=");
+                params[parts[0]] = parts[1];
+            }
+        });
+
+    return params[key];
+}
+
+
+var twitterID = getParam("tid");
+var tweeturl = "http://twitter.com/status/user_timeline/" +
+    twitterID + ".json?count=1&callback=?";
+
 $(document).ready(function(){
   $.getJSON(tweeturl, function(data){
     $.each(data, function(i, item) {
