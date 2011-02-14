@@ -25,19 +25,25 @@ function getParam(key) {
 }
 
 function nameTagHTML(screenName, name, description, location, userPicUrl) {
-  var html = '<div class="top"><h1>HELLO</h1>';
-  html += '<p class="subtitle">I Tweet As</p></div>';
-  html += '<div class="middle"><div class="left"><img src="';
-  html += userPicUrl;
-  html += '"/></div>';
-  html += '<div class="right"><p class="twitterID">';
-  html += "@" + screenName;
-  html += '</p><p class="name">';
-  html += name + " (" + location + ")";
-  html += '</p>';
-  html += '<p class="description">';
-  html += description;
-  html += '</p></div></div><div class="bottom"></div>';
+  var html = '<div class="top">\
+<h1>HELLO</h1>\
+<p class="subtitle">I Tweet As</p>\
+</div>\
+<div class="middle">\
+<div class="left">\
+<img src="{userPicUrl}"/>\
+</div>\
+<div class="right">\
+<p class="twitterID">@{screenName}</p>\
+<p class="name">{name} ({location})</p>\
+<p class="description">{description}</p>\
+</div>\
+</div>\
+<div class="bottom"/>'.supplant({description: description,
+                                 location: location,
+                                 name: name,
+                                 screenName: screenName,
+                                 userPicUrl: userPicUrl});
 
   return html;
 }
