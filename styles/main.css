@@ -1,4 +1,4 @@
-#top {
+.top {
   width: 300px;
   height: 65px;
   background-color: red;
@@ -8,13 +8,13 @@
   -webkit-border-bottom-left-radius: 0px;
 }
 
-#middle {
+.middle {
   width: 298px;
   height: 110px;
   border: 1px solid red;
 }
 
-#bottom {
+.bottom {
   width: 300px;
   height: 20px;
   background-color: red;

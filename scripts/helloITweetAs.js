@@ -24,6 +24,24 @@ function getParam(key) {
   return params[key];
 }
 
+function nameTagHTML(screenName, name, description, location, userPicUrl) {
+  var html = '<div class="top"><h1>HELLO</h1>';
+  html += '<p class="subtitle">I Tweet As</p></div>';
+  html += '<div class="middle"><div class="left"><img src="';
+  html += userPicUrl;
+  html += '"/></div>';
+  html += '<div class="right"><p class="twitterID">';
+  html += "@" + screenName;
+  html += '</p><p class="name">';
+  html += name + " (" + location + ")";
+  html += '</p>';
+  html += '<p class="description">';
+  html += description;
+  html += '</p></div></div><div class="bottom"></div>';
+
+  return html;
+}
+
 
 var twitterID = getParam("tid");
 var tweeturl = "http://api.twitter.com/1/users/show/" + twitterID + ".json";
@@ -34,16 +52,13 @@ $(document).ready(function() {
   // as of jQuery 1.5.
   $.getJSON(tweeturl + "?suppress_response_codes&callback=?", function(data) {
     if (data.error === undefined) {
-      var userPicURL = data.profile_image_url.replace("normal", "bigger");
-      var screenName = data.screen_name;
-      var name = data.name;
-      var description = data.description;
-      var location = data.location;
-      var userPic='<img width=75 height=75 src="'+userPicURL+'" />';
-      $('div.left').html(userPic);
-      $('p.twitterID').html("@"+screenName);
-      $('p.name').html(name+" "+location);
-      $('p.description').html(description);
+      $("div#nametags").
+        append(nameTagHTML(data.screen_name,
+                           data.name,
+                           data.description,
+                           data.location,
+                           data.profile_image_url.replace("normal",
+                                                          "bigger")));
     }
     else {
       // Because we had to suppress HTTP error codes (see above) we don't get
@@ -51,16 +66,16 @@ $(document).ready(function() {
       // broke.
       switch (data.error) {
         case "Not found":
-          $("p.twitterID").html("Error: Could not retrieve your profile.");
+          $("div#nametags").append("Error: Could not retrieve your profile.");
           break;
         case "Internal server error":
-          $("p.twitterID").html("Error: Twitter appears to be down.");
+          $("div#nametags").append("Error: Twitter appears to be down.");
           break;
         case "Service unavailable":
-          $("p.twitterID").html("Error: Twitter is experiencing heavy load.");
+          $("div#nametags").append("Error: Twitter is experiencing heavy load.");
           break;
         default:
-          $("p.twitterID").html("Error: Something went wrong.");
+          $("div#nametags").append("Error: Something went wrong.");
           break;
       }
     }
