@@ -66,7 +66,7 @@ $(document).ready(function() {
       // broke.
       switch (data.error) {
         case "Not found":
-          $("div#nametags").append("Error: Could not retrieve your profile.");
+          $("div#nametags").append("Error: Could not retrieve Twitter profile for '" + twitterID + "'.");
           break;
         case "Internal server error":
           $("div#nametags").append("Error: Twitter appears to be down.");
