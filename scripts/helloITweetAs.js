@@ -35,7 +35,7 @@ function nameTagHTML(screenName, name, description, location, userPicUrl) {
 </div>\
 <div class="right">\
 <p class="twitterID">@{screenName}</p>\
-<p class="name">{name} ({location})</p>\
+<p class="name">{name}<br/>{location}</p>\
 <p class="description">{description}</p>\
 </div>\
 </div>\
