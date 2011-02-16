@@ -50,7 +50,10 @@ function nameTagHTML(screenName, name, description, location, userPicUrl) {
 
 
 var twitterID = getParam("tid");
-var tweeturl = "http://api.twitter.com/1/users/show/" + twitterID + ".json";
+if (twitterID != undefined) {
+    var tweeturl = "http://api.twitter.com/1/users/show/" +
+        twitterID + ".json";
+}
 
 $(document).ready(function() {
   // Need to suppress regular HTTP response codes since jQuery's JSONP
