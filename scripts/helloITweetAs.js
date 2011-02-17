@@ -48,6 +48,27 @@ function nameTagHTML(screenName, name, description, location, userPicUrl) {
   return html;
 }
 
+// Break a single long string into an array of shorter strings that will fit
+// int he given maxLength number of pixels when rendered in the given
+// context.
+function wrapTextIntoLines(context, text, maxLength) {
+  var words = text.split(" ");
+  var currentWordIndex = 0;
+  var lines = [];
+
+  while (currentWordIndex < words.length) {
+    var currentLine = words[currentWordIndex++];
+    while (context.measureText(currentLine + " "
+                               + words[currentWordIndex + 1]).width
+           < maxLength && currentWordIndex < words.length) {
+      currentLine += " " + words[currentWordIndex++];
+    }
+    lines.push(currentLine);
+  }
+
+  return lines;
+}
+
 
 var twitterID = getParam("tid");
 if (twitterID != undefined) {
@@ -136,7 +157,7 @@ Your browser doesn\'t support canvas!\
           context.font = 'bold 20px Arial, sans-serif';
           var fontSize = 20;
           var twitterName = '@' + data.screen_name;
-          var maxWidth = canvas.width - avatar.width - 30;
+          var maxWidth = canvas.width - 73 - 30;
           var centerPoint = (canvas.width - 83) / 2 + 83;
           while (context.measureText(twitterName) > maxWidth) {
             context.font =
@@ -149,6 +170,25 @@ Your browser doesn\'t support canvas!\
           context.fillText(data.name, centerPoint, headerHeight + 35);
           context.font = '11px Arial, sans-serif';
           context.fillText(data.location, centerPoint, headerHeight + 55);
+
+          if (data.description != "") {
+            // The Description can be long, so we'll put up to two lines
+            // worth and then end it
+            context.font = 'italic 14px Arial, sans-serif';
+            var lines = wrapTextIntoLines(context, data.description, maxWidth);
+
+            // If the description will be cut off, append ellipses to the
+            // second line.
+            if (lines.length > 2) {
+              lines[1] += '…';
+            }
+            if (lines.length > 0) {
+              context.fillText(lines[0], centerPoint, headerHeight + 80);
+            }
+            if (lines.length > 1) {
+              context.fillText(lines[1], centerPoint, headerHeight + 94);
+            }
+          }
         }
       }
     }
