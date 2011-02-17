@@ -61,13 +61,52 @@ $(document).ready(function() {
   // as of jQuery 1.5.
   $.getJSON(tweeturl + "?suppress_response_codes&callback=?", function(data) {
     if (data.error === undefined) {
-      $("div#nametags").
-        append(nameTagHTML(data.screen_name,
-                           data.name,
-                           data.description,
-                           data.location,
-                           data.profile_image_url.replace("normal",
-                                                          "bigger")));
+      // Create a new canvas element
+      $("div#nametags")
+        .append('<canvas id="nametag" width="300" height="200">\
+Your browser doesn\'t support canvas!\
+</canvas>');
+
+      var canvas = document.getElementById("nametag");
+
+      if (canvas && canvas.getContext) {
+        var context = canvas.getContext('2d');
+
+        if (context) {
+          context.fillStyle = '#c11';
+          context.strokeStyle = '#c11';
+          context.linewidth = 2;
+          // context.fillRect(0, 0, 300, 60);
+          // context.fillRect(0, 180, 300, 200);
+
+          context.beginPath();
+          context.moveTo(0, 10);
+          context.quadraticCurveTo(0, 0, 10, 0);
+          context.lineTo(290, 0);
+          context.quadraticCurveTo(300, 0, 300, 10);
+          context.lineTo(300, 60);
+          context.lineTo(0, 60);
+          context.closePath();
+          context.fill();
+          context.stroke();
+
+          context.moveTo(0, 180);
+          context.lineTo(300, 180);
+          context.lineTo(300, 190);
+          context.quadraticCurveTo(300, 200, 290, 200);
+          context.lineTo(10, 200);
+          context.quadraticCurveTo(0, 200, 0, 190);
+          context.closePath();
+          context.fill();
+          context.stroke();
+
+          context.moveTo(0, 60);
+          context.lineTo(0, 180);
+          context.moveTo(300, 180);
+          context.lineTo(300, 60);
+          context.stroke();
+        }
+      }
     }
     else {
       // Because we had to suppress HTTP error codes (see above) we don't get
