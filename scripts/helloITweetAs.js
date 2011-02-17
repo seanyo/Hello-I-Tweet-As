@@ -48,6 +48,38 @@ function nameTagHTML(screenName, name, description, location, userPicUrl) {
   return html;
 }
 
+// Break a single long string into an array of shorter strings that will fit
+// int he given maxLength number of pixels when rendered in the given
+// context.
+function wrapTextIntoLines(context, text, maxLength) {
+  var words = text.split(" ");
+  var currentWordIndex = 0;
+  var lines = [];
+
+  while (currentWordIndex < words.length) {
+    var currentLine = words[currentWordIndex++];
+    while (context.measureText(currentLine + " "
+                               + words[currentWordIndex + 1]).width
+           < maxLength && currentWordIndex < words.length) {
+      currentLine += " " + words[currentWordIndex++];
+    }
+    lines.push(currentLine);
+  }
+
+  return lines;
+}
+
+// Adjust the font setting in the given context until the given text will
+// render in a width no bigger than maxWidth. Start by supplant()ing the
+// provided fontSize into the fontString.
+function shrinkTextToFit(context, text, maxWidth, fontString, fontSize) {
+  context.font = fontString.supplant({fontSize: fontSize});
+
+  while (context.measureText(text).width > maxWidth) {
+    context.font = fontString.supplant({fontSize: --fontSize});
+  }
+}
+
 
 var twitterID = getParam("tid");
 if (twitterID != undefined) {
@@ -61,13 +93,112 @@ $(document).ready(function() {
   // as of jQuery 1.5.
   $.getJSON(tweeturl + "?suppress_response_codes&callback=?", function(data) {
     if (data.error === undefined) {
-      $("div#nametags").
-        append(nameTagHTML(data.screen_name,
-                           data.name,
-                           data.description,
-                           data.location,
-                           data.profile_image_url.replace("normal",
-                                                          "bigger")));
+      // Create a new canvas element
+      $("div#nametags")
+        .append('<canvas id="nametag" width="300" height="200">\
+Your browser doesn\'t support canvas!\
+</canvas>');
+
+      var canvas = document.getElementById("nametag");
+
+      if (canvas && canvas.getContext) {
+        var context = canvas.getContext('2d');
+
+        if (context) {
+          var templateColour = '#c11';
+          var strokeWidth = 2;
+          var leftMargin = 1;
+          var rightMargin = 1;
+          var cornerRadius = 9;
+          var headerHeight = 60;
+          var footerHeight = 20;
+
+          context.fillStyle = templateColour;
+          context.strokeStyle = templateColour;
+          context.lineWidth = strokeWidth;
+
+          // Large solid rectangle with rounded corners
+          context.beginPath();
+          context.moveTo(0, cornerRadius);
+          context.quadraticCurveTo(0, 0, cornerRadius, 0);
+          context.lineTo(canvas.width - cornerRadius, 0);
+          context.quadraticCurveTo(canvas.width, 0,
+                                   canvas.width, cornerRadius);
+          context.lineTo(canvas.width, canvas.height - cornerRadius);
+          context.quadraticCurveTo(canvas.width, canvas.height,
+                                   canvas.width - cornerRadius, canvas.height);
+          context.lineTo(cornerRadius, canvas.height);
+          context.quadraticCurveTo(0, canvas.height, 0,
+                                   canvas.height - cornerRadius);
+          context.closePath();
+          context.fill();
+
+          // Inner whitespace for content
+          context.fillStyle = '#fff';
+          context.fillRect(leftMargin, headerHeight,
+                           canvas.width - rightMargin - leftMargin,
+                           canvas.height - headerHeight - footerHeight);
+
+          // Header text
+          context.fillStyle = '#fff';
+          context.font = 'bold 30px Arial, sans-serif';
+          context.textAlign = 'center';
+          context.textBaseline = 'top';
+          context.fillText('HELLO', canvas.width / 2, 5);
+
+          context.font = 'bold 20px Arial, sans-serif';
+          context.fillText('I TWEET AS', canvas.width / 2, 35);
+
+          // Twitter Avatar
+          var avatar = new Image();
+          avatar.src = data.profile_image_url.replace("normal", "bigger");
+
+          // Wait a fifth of a second for the image to load before drawing it
+          setTimeout(function() {
+            context.drawImage(avatar, 10,
+                              (canvas.height -
+                               headerHeight -
+                               footerHeight -
+                               avatar.height) / 2 + headerHeight,
+                              73, 73);
+          }, 200);
+
+          // Twitter account info
+          context.fillStyle = '#000';
+          var twitterName = '@' + data.screen_name;
+          var maxWidth = canvas.width - 73 - 30;
+          var centerPoint = (canvas.width - 83) / 2 + 83;
+          shrinkTextToFit(context, twitterName, maxWidth,
+                          'bold {fontSize}px Arial, sans-serif', 20);
+          context.fillText(twitterName, centerPoint, headerHeight + 10);
+
+          shrinkTextToFit(context, data.name, maxWidth,
+                         '{fontSize}px Arial, sans-serif', 15);
+          context.fillText(data.name, centerPoint, headerHeight + 35);
+          shrinkTextToFit(context, data.location, maxWidth,
+                         '{fontSize}px Arial, sans-serif', 11);
+          context.fillText(data.location, centerPoint, headerHeight + 55);
+
+          if (data.description != "") {
+            // The Description can be long, so we'll put up to two lines
+            // worth and then end it
+            context.font = 'italic 14px Arial, sans-serif';
+            var lines = wrapTextIntoLines(context, data.description, maxWidth);
+
+            // If the description will be cut off, append ellipses to the
+            // second line.
+            if (lines.length > 2) {
+              lines[1] += '…';
+            }
+            if (lines.length > 0) {
+              context.fillText(lines[0], centerPoint, headerHeight + 80);
+            }
+            if (lines.length > 1) {
+              context.fillText(lines[1], centerPoint, headerHeight + 94);
+            }
+          }
+        }
+      }
     }
     else {
       // Because we had to suppress HTTP error codes (see above) we don't get
