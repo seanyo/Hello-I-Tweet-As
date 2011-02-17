@@ -125,6 +125,24 @@ Your browser doesn\'t support canvas!\
           setTimeout(function() {
             context.drawImage(avatar, 10, headerHeight + 10, 73, 73);
           }, 200);
+
+          // Twitter account info
+          context.fillStyle = '#000';
+          context.font = 'bold 20px Arial, sans-serif';
+          var fontSize = 20;
+          var twitterName = '@' + data.screen_name;
+          var maxWidth = canvas.width - avatar.width - 30;
+          var centerPoint = (canvas.width - 83) / 2 + 83;
+          while (context.measureText(twitterName) > maxWidth) {
+            context.font =
+              'bold {fontSize}px Arial, sans-serif'
+              .supplant({fontSize: --fontSize});
+          }
+          context.fillText(twitterName, centerPoint, headerHeight + 10);
+
+          context.font = '15px Arial, sans-serif';
+          context.fillText(data.name, centerPoint, headerHeight + 35);
+          context.fillText(data.location, centerPoint, headerHeight + 50);
         }
       }
     }
