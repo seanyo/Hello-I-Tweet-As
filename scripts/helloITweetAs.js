@@ -123,7 +123,12 @@ Your browser doesn\'t support canvas!\
 
           // Wait a fifth of a second for the image to load before drawing it
           setTimeout(function() {
-            context.drawImage(avatar, 10, headerHeight + 10, 73, 73);
+            context.drawImage(avatar, 10,
+                              (canvas.height -
+                               headerHeight -
+                               footerHeight -
+                               avatar.height) / 2 + headerHeight,
+                              73, 73);
           }, 200);
 
           // Twitter account info
