@@ -83,7 +83,7 @@ Your browser doesn\'t support canvas!\
 
           context.fillStyle = templateColour;
           context.strokeStyle = templateColour;
-          context.linewidth = strokeWidth;
+          context.lineWidth = strokeWidth;
 
           // Large solid rectangle with rounded corners
           context.beginPath();
