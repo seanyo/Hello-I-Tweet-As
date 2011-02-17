@@ -168,7 +168,15 @@ Your browser doesn\'t support canvas!\
             // The Description can be long, so we'll put up to two lines
             // worth and then end it
             context.font = 'italic 14px Arial, sans-serif';
-            var lines = wrapTextIntoLines(context, data.description, maxWidth);
+            var lines;
+            if (data.verified) {
+              // Need to make room for the verified stamp
+              lines = wrapTextIntoLines(context, data.description,
+                                        maxWidth - 30);
+            }
+            else {
+              lines = wrapTextIntoLines(context, data.description, maxWidth);
+            }
 
             // If the description will be cut off, append ellipses to the
             // second line.
