@@ -139,6 +139,15 @@ Your browser doesn\'t support canvas!\
                               73, 73);
           }, 200);
 
+          // Overlay the "verified badge" if appropriate
+          if (data.verified) {
+            var verified = new Image();
+            verified.src = 'images/verified.png';
+            setTimeout(function() {
+              context.drawImage(verified, 72, 145, 23, 23);
+            }, 200);
+          }
+
           // Twitter account info
           context.fillStyle = '#000';
           var twitterName = '@' + data.screen_name;
