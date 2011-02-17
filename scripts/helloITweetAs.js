@@ -147,7 +147,8 @@ Your browser doesn\'t support canvas!\
 
           context.font = '15px Arial, sans-serif';
           context.fillText(data.name, centerPoint, headerHeight + 35);
-          context.fillText(data.location, centerPoint, headerHeight + 50);
+          context.font = '11px Arial, sans-serif';
+          context.fillText(data.location, centerPoint, headerHeight + 55);
         }
       }
     }
