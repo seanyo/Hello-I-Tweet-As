@@ -75,7 +75,9 @@ Your browser doesn\'t support canvas!\
         if (context) {
           var templateColour = '#c11';
           var strokeWidth = 2;
-          var cornerRadius = 13;
+          var leftMargin = 1;
+          var rightMargin = 1;
+          var cornerRadius = 9;
           var headerHeight = 60;
           var footerHeight = 20;
 
@@ -83,20 +85,13 @@ Your browser doesn\'t support canvas!\
           context.strokeStyle = templateColour;
           context.linewidth = strokeWidth;
 
+          // Large solid rectangle with rounded corners
           context.beginPath();
           context.moveTo(0, cornerRadius);
           context.quadraticCurveTo(0, 0, cornerRadius, 0);
           context.lineTo(canvas.width - cornerRadius, 0);
           context.quadraticCurveTo(canvas.width, 0,
                                    canvas.width, cornerRadius);
-          context.lineTo(canvas.width, headerHeight);
-          context.lineTo(0, headerHeight);
-          context.closePath();
-          context.fill();
-          context.stroke();
-
-          context.moveTo(0, canvas.height - footerHeight);
-          context.lineTo(canvas.width, canvas.height - footerHeight);
           context.lineTo(canvas.width, canvas.height - cornerRadius);
           context.quadraticCurveTo(canvas.width, canvas.height,
                                    canvas.width - cornerRadius, canvas.height);
@@ -105,13 +100,12 @@ Your browser doesn\'t support canvas!\
                                    canvas.height - cornerRadius);
           context.closePath();
           context.fill();
-          context.stroke();
 
-          context.moveTo(0, 60);
-          context.lineTo(0, 180);
-          context.moveTo(300, 180);
-          context.lineTo(300, 60);
-          context.stroke();
+          // Inner whitespace for content
+          context.fillStyle = '#fff';
+          context.fillRect(leftMargin, headerHeight,
+                           canvas.width - rightMargin - leftMargin,
+                           canvas.height - headerHeight - footerHeight);
         }
       }
     }
