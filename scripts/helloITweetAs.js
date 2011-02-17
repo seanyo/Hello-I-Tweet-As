@@ -73,29 +73,36 @@ Your browser doesn\'t support canvas!\
         var context = canvas.getContext('2d');
 
         if (context) {
-          context.fillStyle = '#c11';
-          context.strokeStyle = '#c11';
-          context.linewidth = 2;
-          // context.fillRect(0, 0, 300, 60);
-          // context.fillRect(0, 180, 300, 200);
+          var templateColour = '#c11';
+          var strokeWidth = 2;
+          var cornerRadius = 13;
+          var headerHeight = 60;
+          var footerHeight = 20;
+
+          context.fillStyle = templateColour;
+          context.strokeStyle = templateColour;
+          context.linewidth = strokeWidth;
 
           context.beginPath();
-          context.moveTo(0, 10);
-          context.quadraticCurveTo(0, 0, 10, 0);
-          context.lineTo(290, 0);
-          context.quadraticCurveTo(300, 0, 300, 10);
-          context.lineTo(300, 60);
-          context.lineTo(0, 60);
+          context.moveTo(0, cornerRadius);
+          context.quadraticCurveTo(0, 0, cornerRadius, 0);
+          context.lineTo(canvas.width - cornerRadius, 0);
+          context.quadraticCurveTo(canvas.width, 0,
+                                   canvas.width, cornerRadius);
+          context.lineTo(canvas.width, headerHeight);
+          context.lineTo(0, headerHeight);
           context.closePath();
           context.fill();
           context.stroke();
 
-          context.moveTo(0, 180);
-          context.lineTo(300, 180);
-          context.lineTo(300, 190);
-          context.quadraticCurveTo(300, 200, 290, 200);
-          context.lineTo(10, 200);
-          context.quadraticCurveTo(0, 200, 0, 190);
+          context.moveTo(0, canvas.height - footerHeight);
+          context.lineTo(canvas.width, canvas.height - footerHeight);
+          context.lineTo(canvas.width, canvas.height - cornerRadius);
+          context.quadraticCurveTo(canvas.width, canvas.height,
+                                   canvas.width - cornerRadius, canvas.height);
+          context.lineTo(cornerRadius, canvas.height);
+          context.quadraticCurveTo(0, canvas.height, 0,
+                                   canvas.height - cornerRadius);
           context.closePath();
           context.fill();
           context.stroke();
