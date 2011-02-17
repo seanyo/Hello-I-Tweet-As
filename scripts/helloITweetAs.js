@@ -116,6 +116,15 @@ Your browser doesn\'t support canvas!\
 
           context.font = 'bold 20px Arial, sans-serif';
           context.fillText('I TWEET AS', canvas.width / 2, 35);
+
+          // Twitter Avatar
+          var avatar = new Image();
+          avatar.src = data.profile_image_url.replace("normal", "bigger");
+
+          // Wait a fifth of a second for the image to load before drawing it
+          setTimeout(function() {
+            context.drawImage(avatar, 10, headerHeight + 10, 73, 73);
+          }, 200);
         }
       }
     }
