@@ -24,30 +24,6 @@ function getParam(key) {
   return params[key];
 }
 
-function nameTagHTML(screenName, name, description, location, userPicUrl) {
-  var html = '<div class="top">\
-<h1>HELLO</h1>\
-<p class="subtitle">I Tweet As</p>\
-</div>\
-<div class="middle">\
-<div class="left">\
-<img src="{userPicUrl}"/>\
-</div>\
-<div class="right">\
-<p class="twitterID">@{screenName}</p>\
-<p class="name">{name}<br/>{location}</p>\
-<p class="description">{description}</p>\
-</div>\
-</div>\
-<div class="bottom"/>'.supplant({description: description,
-                                 location: location,
-                                 name: name,
-                                 screenName: screenName,
-                                 userPicUrl: userPicUrl});
-
-  return html;
-}
-
 // Break a single long string into an array of shorter strings that will fit
 // int he given maxLength number of pixels when rendered in the given
 // context.
