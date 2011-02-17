@@ -188,7 +188,7 @@ Your browser doesn\'t support canvas!\
             // If the description will be cut off, append ellipses to the
             // second line.
             if (lines.length > 2) {
-              lines[1] += '…';
+              lines[1] += '...';
             }
             if (lines.length > 0) {
               context.fillText(lines[0], centerPoint, headerHeight + 80);
