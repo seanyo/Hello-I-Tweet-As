@@ -69,6 +69,17 @@ function wrapTextIntoLines(context, text, maxLength) {
   return lines;
 }
 
+// Adjust the font setting in the given context until the given text will
+// render in a width no bigger than maxWidth. Start by supplant()ing the
+// provided fontSize into the fontString.
+function shrinkTextToFit(context, text, maxWidth, fontString, fontSize) {
+  context.font = fontString.supplant({fontSize: fontSize});
+
+  while (context.measureText(text).width > maxWidth) {
+    context.font = fontString.supplant({fontSize: --fontSize});
+  }
+}
+
 
 var twitterID = getParam("tid");
 if (twitterID != undefined) {
@@ -154,21 +165,18 @@ Your browser doesn\'t support canvas!\
 
           // Twitter account info
           context.fillStyle = '#000';
-          context.font = 'bold 20px Arial, sans-serif';
-          var fontSize = 20;
           var twitterName = '@' + data.screen_name;
           var maxWidth = canvas.width - 73 - 30;
           var centerPoint = (canvas.width - 83) / 2 + 83;
-          while (context.measureText(twitterName) > maxWidth) {
-            context.font =
-              'bold {fontSize}px Arial, sans-serif'
-              .supplant({fontSize: --fontSize});
-          }
+          shrinkTextToFit(context, twitterName, maxWidth,
+                          'bold {fontSize}px Arial, sans-serif', 20);
           context.fillText(twitterName, centerPoint, headerHeight + 10);
 
-          context.font = '15px Arial, sans-serif';
+          shrinkTextToFit(context, data.name, maxWidth,
+                         '{fontSize}px Arial, sans-serif', 15);
           context.fillText(data.name, centerPoint, headerHeight + 35);
-          context.font = '11px Arial, sans-serif';
+          shrinkTextToFit(context, data.location, maxWidth,
+                         '{fontSize}px Arial, sans-serif', 11);
           context.fillText(data.location, centerPoint, headerHeight + 55);
 
           if (data.description != "") {
