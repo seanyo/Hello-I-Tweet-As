@@ -106,6 +106,16 @@ Your browser doesn\'t support canvas!\
           context.fillRect(leftMargin, headerHeight,
                            canvas.width - rightMargin - leftMargin,
                            canvas.height - headerHeight - footerHeight);
+
+          // Header text
+          context.fillStyle = '#fff';
+          context.font = 'bold 30px Arial, sans-serif';
+          context.textAlign = 'center';
+          context.textBaseline = 'top';
+          context.fillText('HELLO', canvas.width / 2, 5);
+
+          context.font = 'bold 20px Arial, sans-serif';
+          context.fillText('I TWEET AS', canvas.width / 2, 35);
         }
       }
     }
