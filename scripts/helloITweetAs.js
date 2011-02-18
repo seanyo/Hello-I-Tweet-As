@@ -129,7 +129,6 @@ Your browser doesn\'t support canvas!\
           var avatar = new Image();
           avatar.src = data.profile_image_url.replace("normal", "bigger");
 
-          // Wait a fifth of a second for the image to load before drawing it
           avatar.onload = function() {
             context.drawImage(avatar, 10,
                               (canvas.height -
