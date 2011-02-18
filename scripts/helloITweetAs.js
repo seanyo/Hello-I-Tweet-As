@@ -130,23 +130,23 @@ Your browser doesn\'t support canvas!\
           avatar.src = data.profile_image_url.replace("normal", "bigger");
 
           // Wait a fifth of a second for the image to load before drawing it
-          setTimeout(function() {
+          avatar.onload = function() {
             context.drawImage(avatar, 10,
                               (canvas.height -
                                headerHeight -
                                footerHeight -
                                avatar.height) / 2 + headerHeight,
                               73, 73);
-          }, 200);
 
-          // Overlay the "verified badge" if appropriate
-          if (data.verified) {
-            var verified = new Image();
-            verified.src = 'images/verified.png';
-            setTimeout(function() {
-              context.drawImage(verified, 72, 145, 23, 23);
-            }, 200);
-          }
+            // Overlay the "verified badge" if appropriate
+            if (data.verified) {
+              var verified = new Image();
+              verified.src = 'images/verified.png';
+              verified.onload = function() {
+                context.drawImage(verified, 72, 145, 23, 23);
+              };
+            }
+          };
 
           // Twitter account info
           context.fillStyle = '#000';
