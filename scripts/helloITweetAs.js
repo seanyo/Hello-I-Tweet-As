@@ -180,6 +180,11 @@ Your browser doesn\'t support canvas!\
             // If the description will be cut off, append ellipses to the
             // second line.
             if (lines.length > 2) {
+              // If adding the fake ellipsis will make the line too long,
+              // remove the last word.
+              if (context.measureText(lines[1] + '...').width > maxWidth) {
+                lines[1] = lines[1].replace(/ [^ ]+/, '');
+              }
               lines[1] += '...';
             }
             if (lines.length > 0) {
