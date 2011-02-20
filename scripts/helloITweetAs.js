@@ -159,9 +159,11 @@ Your browser doesn\'t support canvas!\
           shrinkTextToFit(context, data.name, maxWidth,
                          '{fontSize}px Arial, sans-serif', 15);
           context.fillText(data.name, centerPoint, headerHeight + 35);
-          shrinkTextToFit(context, data.location, maxWidth,
-                         '{fontSize}px Arial, sans-serif', 11);
-          context.fillText(data.location, centerPoint, headerHeight + 55);
+          if (data.location) {
+            shrinkTextToFit(context, data.location, maxWidth,
+                            '{fontSize}px Arial, sans-serif', 11);
+            context.fillText(data.location, centerPoint, headerHeight + 55);
+          }
 
           if (data.description != "") {
             // The Description can be long, so we'll put up to two lines
