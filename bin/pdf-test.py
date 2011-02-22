@@ -84,22 +84,27 @@ for userNum in range(len(users)):
     c.drawCentredString(labelWidth // 2, 0.625 * inch, "I TWEET AS")
 
     c.setFillColorRGB(0, 0, 0)
-    userText = c.beginText()
-    userText.setTextOrigin(labelWidth // 2, 1.125 * inch)
+    x = labelWidth // 2
+    y = 1.125 * inch
+    fontSize = 16
 
-    userText.setFont("Helvetica-Bold", 16)
-    userText.textLine('@%s' % users[userNum].userName)
+    c.setFont("Helvetica-Bold", fontSize)
+    c.drawCentredString(x, y, '@%s' % users[userNum].userName)
 
-    userText.setFont("Helvetica", 14)
-    userText.textLine(users[userNum].name)
+    y += fontSize
+    fontSize -= 2
+    c.setFont("Helvetica", fontSize)
+    c.drawCentredString(x, y, users[userNum].name)
 
-    userText.setFont("Helvetica", 9)
-    userText.textLine('(%s)' % users[userNum].location)
+    y += fontSize
+    fontSize -= 3
+    c.setFont("Helvetica", fontSize)
+    c.drawCentredString(x, y, '(%s)' % users[userNum].location)
 
-    userText.setFont("Helvetica-Oblique", 11)
-    userText.textLine(users[userNum].description)
-
-    c.drawText(userText)
+    y += fontSize * 2
+    fontSize += 2
+    c.setFont("Helvetica-Oblique", fontSize)
+    c.drawCentredString(x, y, users[userNum].description)
 
     c.restoreState()
 
