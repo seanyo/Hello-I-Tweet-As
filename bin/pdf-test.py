@@ -12,11 +12,11 @@ from reportlab.lib.units import inch
 labelsPerPage = 8
 labelsPerRow = 2
 labelWidth = 3.375 * inch
-labelHeight = 2.333 * inch
-leftMargin = 0.69 * inch
-topMargin = 0.59 * inch
+labelHeight = (2 + 1/3) * inch
+leftMargin = (11 / 16) * inch
+topMargin = (19 / 32) * inch
 horizontalGutter = 0.375 * inch
-verticalGutter = 0.19 * inch
+verticalGutter = (5.5 / 32) * inch
 
 headerHeight = 0.75 * inch
 footerHeight = 0.125 * inch
