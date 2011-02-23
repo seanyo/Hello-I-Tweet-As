@@ -99,7 +99,7 @@ for userNum in range(len(users)):
     y += fontSize
     fontSize -= 3
     c.setFont("Helvetica", fontSize)
-    c.drawCentredString(x, y, '(%s)' % users[userNum].location)
+    c.drawCentredString(x, y, users[userNum].location)
 
     y += fontSize * 2
     fontSize += 2
