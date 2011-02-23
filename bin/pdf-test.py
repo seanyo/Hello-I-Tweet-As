@@ -13,10 +13,10 @@ labelsPerPage = 8
 labelsPerRow = 2
 labelWidth = 3.375 * inch
 labelHeight = 2.333 * inch
-leftMargin = 0.75 * inch
-topMargin = 0.625 * inch
-horizontalGutter = 0.25 * inch
-verticalGutter = 0.125 * inch
+leftMargin = 0.69 * inch
+topMargin = 0.59 * inch
+horizontalGutter = 0.375 * inch
+verticalGutter = 0.19 * inch
 
 headerHeight = 0.75 * inch
 footerHeight = 0.125 * inch
