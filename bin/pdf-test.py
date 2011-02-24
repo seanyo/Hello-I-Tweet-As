@@ -49,6 +49,32 @@ class TwitterUser:
             self.description = user[u'description']
 
 
+def wrapText(canvas, text, maxWidth, maxLines=None, append=u'...'):
+    words = text.split(' ')
+    currentWordIndex = 0
+    lines = []
+
+    while currentWordIndex < len(words):
+        currentLine = words[currentWordIndex]
+        currentWordIndex += 1
+        while currentWordIndex + 1 < len(words) and \
+                canvas.stringWidth(currentLine + " " + \
+                                       words[currentWordIndex + 1]) < maxWidth:
+            currentLine += ' ' + words[currentWordIndex]
+            currentWordIndex += 1
+
+        lines.append(currentLine)
+
+    if maxLines is not None and maxLines < len(lines):
+        lines = lines[:maxLines]
+        while canvas.stringWidth(lines[maxLines-1] + append) > maxWidth:
+            # Remove words from the end until there's room for "..."
+            lines[maxLines-1] = lines[maxLines-1].rsplit(' ', 1)[0]
+        lines[maxLines-1] += append
+
+    return lines
+
+
 c = canvas.Canvas('nametags.pdf', pagesize=letter, bottomup = 0)
 
 users = []
@@ -104,7 +130,10 @@ for userNum in range(len(users)):
     y += fontSize * 2
     fontSize += 2
     c.setFont("Helvetica-Oblique", fontSize)
-    c.drawCentredString(x, y, users[userNum].description)
+    lines = wrapText(c, users[userNum].description, 3 * inch, 2)
+    for line in lines:
+        c.drawCentredString(x, y, line)
+        y += fontSize
 
     c.restoreState()
 
