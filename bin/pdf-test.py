@@ -7,6 +7,7 @@ import json, httplib, sys
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
+from reportlab.lib.utils import ImageReader
 
 
 labelsPerPage = 8
@@ -21,6 +22,7 @@ verticalGutter = (5.5 / 32) * inch
 headerHeight = 0.75 * inch
 footerHeight = 0.125 * inch
 bleed = 0.125 * inch
+padding = 0.25 * inch
 
 showLabelBoundaries = True
 
@@ -109,8 +111,12 @@ for userNum in range(len(users)):
     c.setFont("Helvetica-Bold", 20)
     c.drawCentredString(labelWidth // 2, 0.625 * inch, "I TWEET AS")
 
+    image = ImageReader(users[userNum].avatarUrl)
+    c.drawImage(image, 0.25 * inch, 1.125 * inch, 0.75 * inch, 0.75 * inch)
+
     c.setFillColorRGB(0, 0, 0)
-    x = labelWidth // 2
+    x = (labelWidth - 0.75 * inch - 3 * padding) // \
+        2 + 0.75 * inch + 2 * padding
     y = 1.125 * inch
     fontSize = 16
 
@@ -130,7 +136,8 @@ for userNum in range(len(users)):
     y += fontSize * 2
     fontSize += 2
     c.setFont("Helvetica-Oblique", fontSize)
-    lines = wrapText(c, users[userNum].description, 3 * inch, 2)
+    lines = wrapText(c, users[userNum].description,
+                     labelWidth - 0.75 * inch - 3 * padding, 2)
     for line in lines:
         c.drawCentredString(x, y, line)
         y += fontSize
