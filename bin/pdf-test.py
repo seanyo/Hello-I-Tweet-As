@@ -78,6 +78,8 @@ def wrapText(canvas, text, maxWidth, maxLines=None, append=u'...'):
 
 
 c = canvas.Canvas('nametags.pdf', pagesize=letter, bottomup = 0)
+c.setTitle('Nametags')
+c.setCreator('I Tweet As -- http://itweet.as/')
 
 users = []
 users.append(TwitterUser('seanyo'))
