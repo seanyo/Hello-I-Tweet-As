@@ -25,6 +25,7 @@ bleed = 0.125 * inch
 padding = 0.25 * inch
 
 showLabelBoundaries = True
+labelOffset = 1
 
 
 class TwitterUser:
@@ -90,9 +91,9 @@ users.append(TwitterUser('andrewphoenix'))
 for userNum in range(len(users)):
     c.saveState()
 
-    c.translate(leftMargin + (userNum % labelsPerRow) *
+    c.translate(leftMargin + ((userNum + labelOffset) % labelsPerRow) *
                 (labelWidth + horizontalGutter),
-                topMargin + (userNum // labelsPerRow) *
+                topMargin + ((userNum + labelOffset) // labelsPerRow) *
                 (labelHeight + verticalGutter))
 
     c.setFillColorRGB(0xff / 0xcc, 0, 0);
