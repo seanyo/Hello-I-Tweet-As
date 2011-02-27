@@ -2,7 +2,7 @@
 
 from __future__ import division
 
-import json, httplib, sys
+import argparse, json, httplib, sys
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
@@ -24,7 +24,6 @@ footerHeight = 0.125 * inch
 bleed = 0.125 * inch
 padding = 0.25 * inch
 
-showLabelBoundaries = True
 labelOffset = 1
 
 
@@ -95,6 +94,11 @@ def overlayLabelBoundaries(canvas):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Make Twitter nametags')
+    parser.add_argument('--overlay-boundaries', dest='showLabelBoundaries',
+                        action='store_true', help='Overlay label boundaries')
+    args = parser.parse_args()
+
     c = canvas.Canvas('nametags.pdf', pagesize=letter, bottomup = 0)
     c.setTitle('Nametags')
     c.setCreator('I Tweet As -- http://itweet.as/')
@@ -109,7 +113,7 @@ if __name__ == '__main__':
     for userNum in range(len(users)):
 
         if (userNum + labelOffset) % labelsPerPage == 0:
-            if showLabelBoundaries:
+            if args.showLabelBoundaries:
                 overlayLabelBoundaries(c)
             c.showPage()
 
@@ -184,7 +188,7 @@ if __name__ == '__main__':
         c.restoreState()
 
 
-    if showLabelBoundaries:
+    if args.showLabelBoundaries:
         overlayLabelBoundaries(c)
 
     c.showPage()
