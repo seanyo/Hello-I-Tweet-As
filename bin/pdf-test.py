@@ -94,97 +94,98 @@ def overlayLabelBoundaries(canvas):
         y = y + labelHeight + verticalGutter
 
 
-c = canvas.Canvas('nametags.pdf', pagesize=letter, bottomup = 0)
-c.setTitle('Nametags')
-c.setCreator('I Tweet As -- http://itweet.as/')
+if __name__ == '__main__':
+    c = canvas.Canvas('nametags.pdf', pagesize=letter, bottomup = 0)
+    c.setTitle('Nametags')
+    c.setCreator('I Tweet As -- http://itweet.as/')
 
-users = []
-users.append(TwitterUser('seanyo'))
-users.append(TwitterUser('chrisonbeer'))
-users.append(TwitterUser('wilw'))
-users.append(TwitterUser('andrewphoenix'))
+    users = []
+    users.append(TwitterUser('seanyo'))
+    users.append(TwitterUser('chrisonbeer'))
+    users.append(TwitterUser('wilw'))
+    users.append(TwitterUser('andrewphoenix'))
 
 
-for userNum in range(len(users)):
+    for userNum in range(len(users)):
 
-    if (userNum + labelOffset) % labelsPerPage == 0:
-        if showLabelBoundaries:
-            overlayLabelBoundaries(c)
-        c.showPage()
+        if (userNum + labelOffset) % labelsPerPage == 0:
+            if showLabelBoundaries:
+                overlayLabelBoundaries(c)
+            c.showPage()
 
-    c.saveState()
+        c.saveState()
 
-    c.translate(leftMargin + ((userNum + labelOffset) % labelsPerRow) *
-                (labelWidth + horizontalGutter),
-                topMargin + ((userNum + labelOffset) %
-                             labelsPerPage // labelsPerRow) *
-                (labelHeight + verticalGutter))
+        c.translate(leftMargin + ((userNum + labelOffset) % labelsPerRow) *
+                    (labelWidth + horizontalGutter),
+                    topMargin + ((userNum + labelOffset) %
+                                 labelsPerPage // labelsPerRow) *
+                    (labelHeight + verticalGutter))
 
-    c.setFillColorCMYK(0.0, 0.95, 0.95, 0.20);
-    c.setStrokeColorCMYK(0.0, 0.95, 0.95, 0.20)
-    c.roundRect(0 - bleed, 0 - bleed,
-                labelWidth + 2*bleed, labelHeight + 2*bleed,
-                0.125*inch, stroke=0, fill=1)
-    c.setFillColorCMYK(0.0, 0.0, 0.0, 0.0);
-    c.rect(0-bleed, headerHeight,
-           labelWidth + 2*bleed, labelHeight - headerHeight - footerHeight,
-           stroke=0, fill=1)
+        c.setFillColorCMYK(0.0, 0.95, 0.95, 0.20);
+        c.setStrokeColorCMYK(0.0, 0.95, 0.95, 0.20)
+        c.roundRect(0 - bleed, 0 - bleed,
+                    labelWidth + 2*bleed, labelHeight + 2*bleed,
+                    0.125*inch, stroke=0, fill=1)
+        c.setFillColorCMYK(0.0, 0.0, 0.0, 0.0);
+        c.rect(0-bleed, headerHeight,
+               labelWidth + 2*bleed, labelHeight - headerHeight - footerHeight,
+               stroke=0, fill=1)
 
-    c.setFillColorCMYK(0.0, 0.0, 0.0, 0.0)
+        c.setFillColorCMYK(0.0, 0.0, 0.0, 0.0)
 
-    c.setFont("Helvetica-Bold", 24)
-    c.drawCentredString(labelWidth // 2, 0.375 * inch, "HELLO")
+        c.setFont("Helvetica-Bold", 24)
+        c.drawCentredString(labelWidth // 2, 0.375 * inch, "HELLO")
 
-    c.setFont("Helvetica-Bold", 20)
-    c.drawCentredString(labelWidth // 2, 0.625 * inch, "I TWEET AS")
+        c.setFont("Helvetica-Bold", 20)
+        c.drawCentredString(labelWidth // 2, 0.625 * inch, "I TWEET AS")
 
-    image = ImageReader(users[userNum].avatarUrl)
-    # Images print upside down if c.bottomup is False, so flip them
-    c.saveState()
-    c.scale(1.0, -1.0)
-    c.drawImage(image, 0.25 * inch, -1.875 * inch, 0.75 * inch, 0.75 * inch)
-    c.restoreState()
-
-    c.setFillColorCMYK(0.0, 0.0, 0.0, 1.0)
-    x = (labelWidth - 0.75 * inch - 3 * padding) // \
-        2 + 0.75 * inch + 2 * padding
-    y = 1.125 * inch
-    fontSize = 16
-
-    c.setFont("Helvetica-Bold", fontSize)
-    c.drawCentredString(x, y, '@{0}'.format(users[userNum].userName))
-
-    y += fontSize
-    fontSize -= 2
-    c.setFont("Helvetica", fontSize)
-    c.drawCentredString(x, y, users[userNum].name)
-
-    y += fontSize
-    fontSize -= 3
-    c.setFont("Helvetica", fontSize)
-    c.drawCentredString(x, y, users[userNum].location)
-
-    y += fontSize * 2
-    fontSize += 2
-    c.setFont("Helvetica-Oblique", fontSize)
-    lines = wrapText(c, users[userNum].description,
-                     labelWidth - 0.75 * inch - 3 * padding, 2)
-    for line in lines:
-        c.drawCentredString(x, y, line)
-        y += fontSize
-
-    if users[userNum].verified:
+        image = ImageReader(users[userNum].avatarUrl)
+        # Images print upside down if c.bottomup is False, so flip them
         c.saveState()
         c.scale(1.0, -1.0)
-        c.drawImage('html/images/verified.png', 0.875 * inch, -2 * inch,
-                    0.25 * inch, 0.25 * inch, mask=[0,1,0,1,0,1])
+        c.drawImage(image, 0.25 * inch, -1.875 * inch, 0.75 * inch, 0.75 * inch)
         c.restoreState()
 
-    c.restoreState()
+        c.setFillColorCMYK(0.0, 0.0, 0.0, 1.0)
+        x = (labelWidth - 0.75 * inch - 3 * padding) // \
+            2 + 0.75 * inch + 2 * padding
+        y = 1.125 * inch
+        fontSize = 16
+
+        c.setFont("Helvetica-Bold", fontSize)
+        c.drawCentredString(x, y, '@{0}'.format(users[userNum].userName))
+
+        y += fontSize
+        fontSize -= 2
+        c.setFont("Helvetica", fontSize)
+        c.drawCentredString(x, y, users[userNum].name)
+
+        y += fontSize
+        fontSize -= 3
+        c.setFont("Helvetica", fontSize)
+        c.drawCentredString(x, y, users[userNum].location)
+
+        y += fontSize * 2
+        fontSize += 2
+        c.setFont("Helvetica-Oblique", fontSize)
+        lines = wrapText(c, users[userNum].description,
+                         labelWidth - 0.75 * inch - 3 * padding, 2)
+        for line in lines:
+            c.drawCentredString(x, y, line)
+            y += fontSize
+
+        if users[userNum].verified:
+            c.saveState()
+            c.scale(1.0, -1.0)
+            c.drawImage('html/images/verified.png', 0.875 * inch, -2 * inch,
+                        0.25 * inch, 0.25 * inch, mask=[0,1,0,1,0,1])
+            c.restoreState()
+
+        c.restoreState()
 
 
-if showLabelBoundaries:
-    overlayLabelBoundaries(c)
+    if showLabelBoundaries:
+        overlayLabelBoundaries(c)
 
-c.showPage()
-c.save()
+    c.showPage()
+    c.save()
