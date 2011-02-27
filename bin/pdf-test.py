@@ -25,7 +25,7 @@ bleed = 0.125 * inch
 padding = 0.25 * inch
 
 showLabelBoundaries = True
-labelOffset = 6
+labelOffset = 1
 
 
 class TwitterUser:
@@ -50,6 +50,7 @@ class TwitterUser:
             self.avatarUrl = \
                 user[u'profile_image_url'].replace('normal', 'bigger')
             self.description = user[u'description']
+            self.verified = user[u'verified']
 
 
 def wrapText(canvas, text, maxWidth, maxLines=None, append=u'...'):
@@ -100,6 +101,7 @@ c.setCreator('I Tweet As -- http://itweet.as/')
 users = []
 users.append(TwitterUser('seanyo'))
 users.append(TwitterUser('chrisonbeer'))
+users.append(TwitterUser('wilw'))
 users.append(TwitterUser('andrewphoenix'))
 
 
@@ -170,6 +172,13 @@ for userNum in range(len(users)):
     for line in lines:
         c.drawCentredString(x, y, line)
         y += fontSize
+
+    if users[userNum].verified:
+        c.saveState()
+        c.scale(1.0, -1.0)
+        c.drawImage('html/images/verified.png', 0.875 * inch, -2 * inch,
+                    0.25 * inch, 0.25 * inch, mask=[0,1,0,1,0,1])
+        c.restoreState()
 
     c.restoreState()
 
