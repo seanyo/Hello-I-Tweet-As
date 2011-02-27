@@ -115,7 +115,11 @@ for userNum in range(len(users)):
     c.drawCentredString(labelWidth // 2, 0.625 * inch, "I TWEET AS")
 
     image = ImageReader(users[userNum].avatarUrl)
-    c.drawImage(image, 0.25 * inch, 1.125 * inch, 0.75 * inch, 0.75 * inch)
+    # Images print upside down if c.bottomup is False, so flip them
+    c.saveState()
+    c.scale(1.0, -1.0)
+    c.drawImage(image, 0.25 * inch, -1.875 * inch, 0.75 * inch, 0.75 * inch)
+    c.restoreState()
 
     c.setFillColorRGB(0, 0, 0)
     x = (labelWidth - 0.75 * inch - 3 * padding) // \
