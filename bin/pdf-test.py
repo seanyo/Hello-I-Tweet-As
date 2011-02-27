@@ -38,7 +38,7 @@ class TwitterUser:
 
     def sync(self):
         conn = httplib.HTTPConnection(TwitterUser.twitterHost)
-        request = '/1/users/show/%s.json' % self.userName
+        request = '/1/users/show/{0}.json'.format(self.userName)
         conn.request('GET', request)
         response = conn.getresponse()
 
@@ -152,7 +152,7 @@ for userNum in range(len(users)):
     fontSize = 16
 
     c.setFont("Helvetica-Bold", fontSize)
-    c.drawCentredString(x, y, '@%s' % users[userNum].userName)
+    c.drawCentredString(x, y, '@{0}'.format(users[userNum].userName))
 
     y += fontSize
     fontSize -= 2
