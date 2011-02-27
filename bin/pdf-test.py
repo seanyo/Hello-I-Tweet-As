@@ -81,7 +81,7 @@ def wrapText(canvas, text, maxWidth, maxLines=None, append=u'...'):
 
 def overlayLabelBoundaries(canvas):
     canvas.setDash(6, 3)
-    canvas.setStrokeColorRGB(0.25, 0.25, 0.25)
+    canvas.setStrokeColorCMYK(0.0, 0.0, 0.0, 0.75)
     canvas.setLineWidth(0.5)
 
     x = leftMargin
@@ -120,17 +120,17 @@ for userNum in range(len(users)):
                              labelsPerPage // labelsPerRow) *
                 (labelHeight + verticalGutter))
 
-    c.setFillColorRGB(0xff / 0xcc, 0, 0);
-    c.setStrokeColorRGB(0xff / 0xcc, 0, 0)
+    c.setFillColorCMYK(0.0, 0.95, 0.95, 0.20);
+    c.setStrokeColorCMYK(0.0, 0.95, 0.95, 0.20)
     c.roundRect(0 - bleed, 0 - bleed,
                 labelWidth + 2*bleed, labelHeight + 2*bleed,
                 0.125*inch, stroke=0, fill=1)
-    c.setFillColorRGB(0xfff, 0xfff, 0xfff);
+    c.setFillColorCMYK(0.0, 0.0, 0.0, 0.0);
     c.rect(0-bleed, headerHeight,
            labelWidth + 2*bleed, labelHeight - headerHeight - footerHeight,
            stroke=0, fill=1)
 
-    c.setFillColorRGB(0xff, 0xff, 0xff)
+    c.setFillColorCMYK(0.0, 0.0, 0.0, 0.0)
 
     c.setFont("Helvetica-Bold", 24)
     c.drawCentredString(labelWidth // 2, 0.375 * inch, "HELLO")
@@ -145,7 +145,7 @@ for userNum in range(len(users)):
     c.drawImage(image, 0.25 * inch, -1.875 * inch, 0.75 * inch, 0.75 * inch)
     c.restoreState()
 
-    c.setFillColorRGB(0, 0, 0)
+    c.setFillColorCMYK(0.0, 0.0, 0.0, 1.0)
     x = (labelWidth - 0.75 * inch - 3 * padding) // \
         2 + 0.75 * inch + 2 * padding
     y = 1.125 * inch
