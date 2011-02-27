@@ -95,20 +95,19 @@ def overlayLabelBoundaries(canvas):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Make Twitter nametags')
+    parser.add_argument('usernames', metavar='username', nargs='+',
+                        help='Twitter usernames')
     parser.add_argument('--overlay-boundaries', dest='showLabelBoundaries',
                         action='store_true', help='Overlay label boundaries')
     args = parser.parse_args()
 
+    users = []
+    for username in args.usernames:
+        users.append(TwitterUser(username))
+
     c = canvas.Canvas('nametags.pdf', pagesize=letter, bottomup = 0)
     c.setTitle('Nametags')
     c.setCreator('I Tweet As -- http://itweet.as/')
-
-    users = []
-    users.append(TwitterUser('seanyo'))
-    users.append(TwitterUser('chrisonbeer'))
-    users.append(TwitterUser('wilw'))
-    users.append(TwitterUser('andrewphoenix'))
-
 
     for userNum in range(len(users)):
 
