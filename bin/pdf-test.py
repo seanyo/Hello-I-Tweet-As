@@ -25,7 +25,7 @@ bleed = 0.125 * inch
 padding = 0.25 * inch
 
 showLabelBoundaries = True
-labelOffset = 1
+labelOffset = 6
 
 
 class TwitterUser:
@@ -78,6 +78,21 @@ def wrapText(canvas, text, maxWidth, maxLines=None, append=u'...'):
     return lines
 
 
+def overlayLabelBoundaries(canvas):
+    canvas.setDash(6, 3)
+    canvas.setStrokeColorRGB(0.25, 0.25, 0.25)
+    canvas.setLineWidth(0.5)
+
+    x = leftMargin
+    y = topMargin
+    for row in range(labelsPerPage // labelsPerRow):
+        for label in range(labelsPerRow):
+            canvas.roundRect(x, y, labelWidth, labelHeight, 0.125 * inch)
+            x = x + labelWidth + horizontalGutter
+        x = leftMargin
+        y = y + labelHeight + verticalGutter
+
+
 c = canvas.Canvas('nametags.pdf', pagesize=letter, bottomup = 0)
 c.setTitle('Nametags')
 c.setCreator('I Tweet As -- http://itweet.as/')
@@ -89,11 +104,18 @@ users.append(TwitterUser('andrewphoenix'))
 
 
 for userNum in range(len(users)):
+
+    if (userNum + labelOffset) % labelsPerPage == 0:
+        if showLabelBoundaries:
+            overlayLabelBoundaries(c)
+        c.showPage()
+
     c.saveState()
 
     c.translate(leftMargin + ((userNum + labelOffset) % labelsPerRow) *
                 (labelWidth + horizontalGutter),
-                topMargin + ((userNum + labelOffset) // labelsPerRow) *
+                topMargin + ((userNum + labelOffset) %
+                             labelsPerPage // labelsPerRow) *
                 (labelHeight + verticalGutter))
 
     c.setFillColorRGB(0xff / 0xcc, 0, 0);
@@ -152,20 +174,8 @@ for userNum in range(len(users)):
     c.restoreState()
 
 
-# Overlay label boundaries on the page
 if showLabelBoundaries:
-    c.setDash(6, 3)
-    c.setStrokeColorRGB(0.25, 0.25, 0.25)
-    c.setLineWidth(0.5)
-
-    x = leftMargin
-    y = topMargin
-    for row in range(labelsPerPage // labelsPerRow):
-        for label in range(labelsPerRow):
-            c.roundRect(x, y, labelWidth, labelHeight, 0.125 * inch)
-            x = x + labelWidth + horizontalGutter
-        x = leftMargin
-        y = y + labelHeight + verticalGutter
+    overlayLabelBoundaries(c)
 
 c.showPage()
 c.save()
