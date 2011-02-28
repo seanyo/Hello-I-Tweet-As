@@ -24,8 +24,6 @@ footerHeight = 0.125 * inch
 bleed = 0.125 * inch
 padding = 0.25 * inch
 
-labelOffset = 1
-
 
 class TwitterUser:
     twitterHost = 'api.twitter.com'
@@ -99,6 +97,8 @@ if __name__ == '__main__':
                         help='Twitter usernames')
     parser.add_argument('--overlay-boundaries', dest='showLabelBoundaries',
                         action='store_true', help='Overlay label boundaries')
+    parser.add_argument('--offset', dest='labelOffset', metavar='N', type=int,
+                        default=0, help='Skip N labels')
     args = parser.parse_args()
 
     users = []
@@ -111,16 +111,17 @@ if __name__ == '__main__':
 
     for userNum in range(len(users)):
 
-        if (userNum + labelOffset) % labelsPerPage == 0:
+        if (userNum + args.labelOffset) % labelsPerPage == 0:
             if args.showLabelBoundaries:
                 overlayLabelBoundaries(c)
             c.showPage()
 
         c.saveState()
 
-        c.translate(leftMargin + ((userNum + labelOffset) % labelsPerRow) *
+        c.translate(leftMargin + ((userNum + args.labelOffset) %
+                                  labelsPerRow) *
                     (labelWidth + horizontalGutter),
-                    topMargin + ((userNum + labelOffset) %
+                    topMargin + ((userNum + args.labelOffset) %
                                  labelsPerPage // labelsPerRow) *
                     (labelHeight + verticalGutter))
 
