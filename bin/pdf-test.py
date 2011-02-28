@@ -111,7 +111,7 @@ if __name__ == '__main__':
 
     for userNum in range(len(users)):
 
-        if (userNum + args.labelOffset) % labelsPerPage == 0:
+        if userNum != 0 and (userNum + args.labelOffset) % labelsPerPage == 0:
             if args.showLabelBoundaries:
                 overlayLabelBoundaries(c)
             c.showPage()
