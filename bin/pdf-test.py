@@ -99,7 +99,14 @@ if __name__ == '__main__':
                         action='store_true', help='Overlay label boundaries')
     parser.add_argument('--offset', dest='labelOffset', metavar='N', type=int,
                         default=0, help='Skip N labels')
+    parser.add_argument('--fudge', dest='fudge', help='Fudge factor in points',
+                        type=int, nargs=2, metavar=('horiz', 'vert'))
     args = parser.parse_args()
+
+    # Adjust the overall registration to correct for printer quirkiness
+    if args.fudge is not None:
+        leftMargin += args.fudge[0]
+        topMargin += args.fudge[1]
 
     users = []
     for username in args.usernames:
