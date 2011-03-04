@@ -14,6 +14,7 @@ class CalibrationPage:
         self.centreRectangle = [3 * inch, 3 * inch]
         self.fudgeLineLength = 2 * inch
         self.fudgeLinePlacement = 2 * inch
+        self.fudgeLineCapLength = 0.25 * inch
 
 
 if __name__ == '__main__':
@@ -27,30 +28,17 @@ if __name__ == '__main__':
 
     c.setFont('Helvetica', 7)
     c.line(p.fudgeLinePlacement, 0, p.fudgeLinePlacement, p.fudgeLineLength)
-    for tick in range(0, int(p.fudgeLineLength) + 1, 3):
-        if tick % 12 == 0:
-            offset = 6
-            c.drawRightString(p.fudgeLinePlacement - 12, tick + 2,
-                              '{0}'.format(tick - 72))
-        else:
-            offset = 3
-        c.line(tick, p.pageSize[1] - p.fudgeLinePlacement - offset,
-               tick, p.pageSize[1] - p.fudgeLinePlacement)
+    c.line(p.fudgeLinePlacement - (p.fudgeLineCapLength / 2),
+           p.fudgeLineLength,
+           p.fudgeLinePlacement + (p.fudgeLineCapLength / 2),
+           p.fudgeLineLength)
 
     c.line(0, p.pageSize[1] - p.fudgeLinePlacement,
            p.fudgeLineLength, p.pageSize[1] - p.fudgeLinePlacement)
-    for tick in range(0, int(p.fudgeLineLength) + 1, 3):
-        if tick % 12 == 0:
-            offset = 6
-            c.saveState()
-            c.rotate(270)
-            c.drawString(-p.pageSize[1] + p.fudgeLinePlacement + 12, tick + 2,
-                          '{0}'.format(tick - 72))
-            c.restoreState()
-        else:
-            offset = 3
-        c.line(p.fudgeLinePlacement - offset, tick,
-               p.fudgeLinePlacement, tick)
+    c.line(p.fudgeLineLength,
+           p.pageSize[1] - p.fudgeLinePlacement - (p.fudgeLineCapLength / 2),
+           p.fudgeLineLength,
+           p.pageSize[1] - p.fudgeLinePlacement + (p.fudgeLineCapLength / 2))
 
     c.showPage()
     c.save()
