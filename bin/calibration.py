@@ -17,11 +17,11 @@ class CalibrationPage:
     def __init__(self):
         self.pageSize = letter
 
-        # We use 4.25" for the centre rectangle so that a letter or legal
-        # page folded in half can be used to check its size.
-        #
-        # TODO: Dynamically set the centre square size from the page size
-        self.centreRectangle = [4.25 * inch, 4.25 * inch]
+        # The size of the square in the centre of the page should be half of
+        # the page height or width, whichever is smaller. This way a second
+        # page, folded in half, can be used to verify its size.
+        centre_square_size = min(self.pageSize[0], self.pageSize[1]) / 2
+        self.centreRectangle = [centre_square_size, centre_square_size]
         self.fudgeLineLength = 2 * inch
         self.fudgeLinePlacement = 2 * inch
         self.fudgeLineCapLength = 0.25 * inch
