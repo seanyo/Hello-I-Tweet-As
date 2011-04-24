@@ -76,6 +76,7 @@ class CalibrationPage:
 
 if __name__ == '__main__':
     c = canvas.Canvas('calibration.pdf', pagesize=letter, bottomup=False)
+    c.setLineWidth(0.2)
     p = CalibrationPage()
 
     c.setFont('Helvetica', 10)
