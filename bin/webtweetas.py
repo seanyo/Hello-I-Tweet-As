@@ -7,7 +7,7 @@ except ImportError, e:
     print >> sys.stderr, "You need to install web.py"
     sys.exit(1)
 
-from pdf_test import LabelBuilder, LabelFormat, TwitterUser
+from itweetas import LabelBuilder, LabelFormat, TwitterUser
 
 
 urls = (
