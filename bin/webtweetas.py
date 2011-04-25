@@ -33,6 +33,7 @@ class pdf:
         builder.generatePDF(offset=int(offset))
 
         web.header('Content-Type', 'application/pdf')
+        web.header('Content-Disposition', 'attachment; filename="nametags.pdf"')
         return format(builder.getPDF())
 
 
