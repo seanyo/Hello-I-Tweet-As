@@ -7,6 +7,8 @@ except ImportError, e:
     print >> sys.stderr, "You need to install web.py"
     sys.exit(1)
 
+from pdf_test import LabelBuilder, LabelFormat, TwitterUser
+
 
 urls = (
     '/', 'index',
@@ -22,11 +24,13 @@ class pdf:
     def GET(self, offset, users, fudge_x, fudge_y):
         users = users.split(',')
 
-        return '''Fudge: {0}, {1}
-Offset: {3}
-Users:
-- {2}'''.format(fudge_x, fudge_y, '''
-- '''.join(users), offset)
+        builder = LabelBuilder(LabelFormat())
+        builder.setFudge(int(fudge_x), int(fudge_y))
+
+        for user in users:
+            builder.addUser(TwitterUser(user))
+
+        builder.generatePDF(offset=int(offset))
 
 
 app = web.application(urls, globals())
