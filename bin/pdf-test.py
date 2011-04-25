@@ -10,21 +10,6 @@ from reportlab.lib.units import inch
 from reportlab.lib.utils import ImageReader
 
 
-labelsPerPage = 8
-labelsPerRow = 2
-labelWidth = 3.375 * inch
-labelHeight = (2 + 1/3) * inch
-leftMargin = (11 / 16) * inch
-topMargin = (19 / 32) * inch
-horizontalGutter = 0.375 * inch
-verticalGutter = (5.5 / 32) * inch
-
-headerHeight = 0.75 * inch
-footerHeight = 0.125 * inch
-bleed = 0.125 * inch
-padding = 0.25 * inch
-
-
 class TwitterUser:
     twitterHost = 'api.twitter.com'
     twitterPort = 80
@@ -50,45 +35,195 @@ class TwitterUser:
             self.verified = user[u'verified']
 
 
-def wrapText(canvas, text, maxWidth, maxLines=None, append=u'...'):
-    words = text.split(' ')
-    currentWordIndex = 0
-    lines = []
+class LabelFormat:
+    '''A class to represent the layout of a sheet of labels.'''
+    def __init__(self, labels_per_page=8, labels_per_row=2,
+                 label_width=3.375 * inch, label_height=(2 + 1/3) * inch,
+                 left_margin=(11 / 16) * inch, top_margin=(19 / 32) * inch,
+                 horizontal_gutter=0.375 * inch, vertical_gutter=(3/16 * inch),
 
-    while currentWordIndex < len(words):
-        currentLine = words[currentWordIndex]
-        currentWordIndex += 1
-        while currentWordIndex + 1 < len(words) and \
-                canvas.stringWidth(currentLine + " " + \
-                                       words[currentWordIndex + 1]) < maxWidth:
-            currentLine += ' ' + words[currentWordIndex]
+                 header_height=0.75 * inch, footer_height=0.125 * inch,
+                 bleed=0.125 * inch, padding=0.25 * inch):
+
+        '''Default to Avery 8-up nametag settings, e.g. #8395, 5395, or
+        ##45395.'''
+        self.labelsPerPage = labels_per_page
+        self.labelsPerRow = labels_per_row
+        self.labelWidth = label_width
+        self.labelHeight = label_height
+        self.leftMargin = left_margin
+        self.topMargin = top_margin
+        self.horizontalGutter = horizontal_gutter
+        self.verticalGutter = vertical_gutter
+
+        self.headerHeight = header_height
+        self.footerHeight = footer_height
+        self.bleed = bleed
+        self.padding = padding
+
+
+class LabelBuilder:
+
+    @classmethod
+    def wrapText(cls, canvas, text, maxWidth, maxLines=None, append=u'...'):
+        words = text.split(' ')
+        currentWordIndex = 0
+        lines = []
+
+        while currentWordIndex < len(words):
+            currentLine = words[currentWordIndex]
             currentWordIndex += 1
+            while currentWordIndex + 1 < len(words) and \
+                    canvas.stringWidth(currentLine + " " + \
+                                           words[currentWordIndex + 1]) < maxWidth:
+                currentLine += ' ' + words[currentWordIndex]
+                currentWordIndex += 1
 
-        lines.append(currentLine)
+            lines.append(currentLine)
 
-    if maxLines is not None and maxLines < len(lines):
-        lines = lines[:maxLines]
-        while canvas.stringWidth(lines[maxLines-1] + append) > maxWidth:
-            # Remove words from the end until there's room for "..."
-            lines[maxLines-1] = lines[maxLines-1].rsplit(' ', 1)[0]
-        lines[maxLines-1] += append
+        if maxLines is not None and maxLines < len(lines):
+            lines = lines[:maxLines]
+            while canvas.stringWidth(lines[maxLines-1] + append) > maxWidth:
+                # Remove words from the end until there's room for "..."
+                lines[maxLines-1] = lines[maxLines-1].rsplit(' ', 1)[0]
+            lines[maxLines-1] += append
 
-    return lines
+        return lines
 
+    def __init__(self, format):
+        self.format = format
+        self.users = []
+        self.fudge = [0, 0]
+        self.canvas = canvas.Canvas('nametags.pdf',
+                                    pagesize=letter,
+                                    bottomup = 0)
+        self.canvas.setTitle('Nametags')
+        self.canvas.setCreator('I Tweet As -- http://itweet.as/')
 
-def overlayLabelBoundaries(canvas):
-    canvas.setDash(6, 3)
-    canvas.setStrokeColorCMYK(0.0, 0.0, 0.0, 0.75)
-    canvas.setLineWidth(0.5)
+    def overlayLabelBoundaries(self):
+        self.canvas.setDash(6, 3)
+        self.canvas.setStrokeColorCMYK(0.0, 0.0, 0.0, 0.75)
+        self.canvas.setLineWidth(0.5)
 
-    x = leftMargin
-    y = topMargin
-    for row in range(labelsPerPage // labelsPerRow):
-        for label in range(labelsPerRow):
-            canvas.roundRect(x, y, labelWidth, labelHeight, 0.125 * inch)
-            x = x + labelWidth + horizontalGutter
-        x = leftMargin
-        y = y + labelHeight + verticalGutter
+        x = self.format.leftMargin
+        y = self.format.topMargin
+        for row in range(self.format.labelsPerPage //
+                         self.format.labelsPerRow):
+            for label in range(self.format.labelsPerRow):
+                self.canvas.roundRect(x, y, self.format.labelWidth,
+                                      self.format.labelHeight, 0.125 * inch)
+                x = x + self.format.labelWidth + self.format.horizontalGutter
+            x = self.format.leftMargin
+            y = y + self.format.labelHeight + self.format.verticalGutter
+
+    def addUser(self, user):
+        self.users.append(user)
+
+    def setFudge(self, horizontal, vertical):
+        self.format.leftMargin += horizontal
+        self.format.topMargin += vertical
+
+    def generatePDF(self, offset=0, showLabelBoundaries=False):
+        c = self.canvas
+
+        for userNum in range(len(self.users)):
+            if userNum != 0 and (userNum + offset) % self.format.labelsPerPage == 0:
+                if showLabelBoundaries:
+                    self.overlayLabelBoundaries()
+                c.showPage()
+
+            c.saveState()
+
+            c.translate(self.format.leftMargin +
+                                  ((userNum + offset) %
+                                   self.format.labelsPerRow) *
+                                  (self.format.labelWidth +
+                                   self.format.horizontalGutter),
+                                  self.format.topMargin +
+                                  ((userNum + offset) %
+                                   self.format.labelsPerPage //
+                                   self.format.labelsPerRow) *
+                                  (self.format.labelHeight +
+                                   self.format.verticalGutter))
+
+            c.setFillColorCMYK(0.0, 0.95, 0.95, 0.20);
+            c.setStrokeColorCMYK(0.0, 0.95, 0.95, 0.20)
+            c.roundRect(0 - self.format.bleed, 0 - self.format.bleed,
+                                  self.format.labelWidth +
+                                  2 * self.format.bleed,
+                                  self.format.labelHeight +
+                                  2 * self.format.bleed,
+                                  0.125*inch, stroke=0, fill=1)
+            c.setFillColorCMYK(0.0, 0.0, 0.0, 0.0);
+            self.canvas.rect(0 - self.format.bleed, self.format.headerHeight,
+                             self.format.labelWidth + 2 * self.format.bleed,
+                             self.format.labelHeight -
+                             self.format.headerHeight -
+                             self.format.footerHeight,
+                   stroke=0, fill=1)
+
+            c.setFillColorCMYK(0.0, 0.0, 0.0, 0.0)
+
+            c.setFont("Helvetica-Bold", 24)
+            c.drawCentredString(
+                self.format.labelWidth // 2, 0.375 * inch, "HELLO")
+
+            c.setFont("Helvetica-Bold", 20)
+            c.drawCentredString(self.format.labelWidth // 2,
+                                          0.625 * inch, "I TWEET AS")
+
+            image = ImageReader(self.users[userNum].avatarUrl)
+            # Images print upside down if c.bottomup is False, so flip them
+            c.saveState()
+            c.scale(1.0, -1.0)
+            c.drawImage(image, 0.25 * inch, -1.875 * inch,
+                                    0.75 * inch, 0.75 * inch)
+            c.restoreState()
+
+            c.setFillColorCMYK(0.0, 0.0, 0.0, 1.0)
+            x = (self.format.labelWidth - 0.75 * inch -
+                 3 * self.format.padding) // \
+                 2 + 0.75 * inch + 2 * self.format.padding
+            y = 1.125 * inch
+            fontSize = 16
+
+            c.setFont("Helvetica-Bold", fontSize)
+            c.drawCentredString(x, y, '@{0}'.format(self.users[userNum].userName))
+
+            y += fontSize
+            fontSize -= 2
+            c.setFont("Helvetica", fontSize)
+            c.drawCentredString(x, y, self.users[userNum].name)
+
+            y += fontSize
+            fontSize -= 3
+            c.setFont("Helvetica", fontSize)
+            c.drawCentredString(x, y, self.users[userNum].location)
+
+            y += fontSize * 2
+            fontSize += 2
+            c.setFont("Helvetica-Oblique", fontSize)
+            lines = LabelBuilder.wrapText(c, self.users[userNum].description,
+                                          self.format.labelWidth - 0.75 * inch -
+                                          3 * self.format.padding, 2)
+            for line in lines:
+                c.drawCentredString(x, y, line)
+                y += fontSize
+
+            if self.users[userNum].verified:
+                c.saveState()
+                c.scale(1.0, -1.0)
+                c.drawImage('html/images/verified.png', 0.875 * inch, -2 * inch,
+                            0.25 * inch, 0.25 * inch, mask=[0,1,0,1,0,1])
+                c.restoreState()
+
+            c.restoreState()
+
+        if showLabelBoundaries:
+            self.overlayLabelBoundaries()
+
+        c.showPage()
+        c.save()
 
 
 if __name__ == '__main__':
@@ -103,100 +238,14 @@ if __name__ == '__main__':
                         type=int, nargs=2, metavar=('horiz', 'vert'))
     args = parser.parse_args()
 
+    builder = LabelBuilder(LabelFormat())
+
     # Adjust the overall registration to correct for printer quirkiness
     if args.fudge is not None:
-        leftMargin += args.fudge[0]
-        topMargin += args.fudge[1]
+        builder.setFudge(args.fudge[0], args.fudge[1])
 
     users = []
     for username in args.usernames:
-        users.append(TwitterUser(username))
+        builder.addUser(TwitterUser(username))
 
-    c = canvas.Canvas('nametags.pdf', pagesize=letter, bottomup = 0)
-    c.setTitle('Nametags')
-    c.setCreator('I Tweet As -- http://itweet.as/')
-
-    for userNum in range(len(users)):
-
-        if userNum != 0 and (userNum + args.labelOffset) % labelsPerPage == 0:
-            if args.showLabelBoundaries:
-                overlayLabelBoundaries(c)
-            c.showPage()
-
-        c.saveState()
-
-        c.translate(leftMargin + ((userNum + args.labelOffset) %
-                                  labelsPerRow) *
-                    (labelWidth + horizontalGutter),
-                    topMargin + ((userNum + args.labelOffset) %
-                                 labelsPerPage // labelsPerRow) *
-                    (labelHeight + verticalGutter))
-
-        c.setFillColorCMYK(0.0, 0.95, 0.95, 0.20);
-        c.setStrokeColorCMYK(0.0, 0.95, 0.95, 0.20)
-        c.roundRect(0 - bleed, 0 - bleed,
-                    labelWidth + 2*bleed, labelHeight + 2*bleed,
-                    0.125*inch, stroke=0, fill=1)
-        c.setFillColorCMYK(0.0, 0.0, 0.0, 0.0);
-        c.rect(0-bleed, headerHeight,
-               labelWidth + 2*bleed, labelHeight - headerHeight - footerHeight,
-               stroke=0, fill=1)
-
-        c.setFillColorCMYK(0.0, 0.0, 0.0, 0.0)
-
-        c.setFont("Helvetica-Bold", 24)
-        c.drawCentredString(labelWidth // 2, 0.375 * inch, "HELLO")
-
-        c.setFont("Helvetica-Bold", 20)
-        c.drawCentredString(labelWidth // 2, 0.625 * inch, "I TWEET AS")
-
-        image = ImageReader(users[userNum].avatarUrl)
-        # Images print upside down if c.bottomup is False, so flip them
-        c.saveState()
-        c.scale(1.0, -1.0)
-        c.drawImage(image, 0.25 * inch, -1.875 * inch, 0.75 * inch, 0.75 * inch)
-        c.restoreState()
-
-        c.setFillColorCMYK(0.0, 0.0, 0.0, 1.0)
-        x = (labelWidth - 0.75 * inch - 3 * padding) // \
-            2 + 0.75 * inch + 2 * padding
-        y = 1.125 * inch
-        fontSize = 16
-
-        c.setFont("Helvetica-Bold", fontSize)
-        c.drawCentredString(x, y, '@{0}'.format(users[userNum].userName))
-
-        y += fontSize
-        fontSize -= 2
-        c.setFont("Helvetica", fontSize)
-        c.drawCentredString(x, y, users[userNum].name)
-
-        y += fontSize
-        fontSize -= 3
-        c.setFont("Helvetica", fontSize)
-        c.drawCentredString(x, y, users[userNum].location)
-
-        y += fontSize * 2
-        fontSize += 2
-        c.setFont("Helvetica-Oblique", fontSize)
-        lines = wrapText(c, users[userNum].description,
-                         labelWidth - 0.75 * inch - 3 * padding, 2)
-        for line in lines:
-            c.drawCentredString(x, y, line)
-            y += fontSize
-
-        if users[userNum].verified:
-            c.saveState()
-            c.scale(1.0, -1.0)
-            c.drawImage('html/images/verified.png', 0.875 * inch, -2 * inch,
-                        0.25 * inch, 0.25 * inch, mask=[0,1,0,1,0,1])
-            c.restoreState()
-
-        c.restoreState()
-
-
-    if args.showLabelBoundaries:
-        overlayLabelBoundaries(c)
-
-    c.showPage()
-    c.save()
+    builder.generatePDF(offset=args.labelOffset)
