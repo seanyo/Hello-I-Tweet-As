@@ -32,6 +32,9 @@ class pdf:
 
         builder.generatePDF(offset=int(offset))
 
+        web.header('Content-Type', 'application/pdf')
+        return format(builder.getPDF())
+
 
 app = web.application(urls, globals())
 

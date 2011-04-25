@@ -3,6 +3,10 @@
 from __future__ import division
 
 import argparse, json, httplib, sys
+try:
+    from cStringIO import StringIO
+except ImportError, e:
+    from StringIO import StringIO
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
@@ -94,7 +98,8 @@ class LabelBuilder:
         self.format = format
         self.users = []
         self.fudge = [0, 0]
-        self.canvas = canvas.Canvas('nametags.pdf',
+        self.buffer = StringIO()
+        self.canvas = canvas.Canvas(self.buffer,
                                     pagesize=letter,
                                     bottomup = 0)
         self.canvas.setTitle('Nametags')
@@ -225,6 +230,9 @@ class LabelBuilder:
         c.showPage()
         c.save()
 
+    def getPDF(self):
+        return self.buffer.getvalue()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Make Twitter nametags')
@@ -249,3 +257,5 @@ if __name__ == '__main__':
         builder.addUser(TwitterUser(username))
 
     builder.generatePDF(offset=args.labelOffset)
+
+    print builder.getPDF()
