@@ -17,7 +17,43 @@ urls = (
 
 class index:
     def GET(self):
-        return 'Hello, World!'
+        return '''<html>
+<head>
+<title>Hello, I tweet as...</title>
+</head>
+
+<body>
+<h1>Hello, I Tweet As</h1>
+<p>Enter your Twitter ID and we'll make a name tag for you!</p>
+<form>
+@<input id="twitter_id"/><br/>
+<input type="submit" value="Make me a Twitter name tag!"/>
+</form>
+</body>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+<script type="text/javascript">
+function submit_form(event) {
+  window.location = '/0/' + $('#twitter_id').val() + '/0/0/';
+  return false;
+}
+
+/*
+$('#twitter_id').keypress(function(event) {
+  var code = (event.keyCode ? event.keyCode : event.which);
+
+  // Enter
+  if (code == 13) {
+    if ($('#twitter_id').val() !== '') {
+      submit_form();
+    }
+    return false;
+  }
+});
+*/
+$('form').submit(submit_form);
+</script>
+</html>
+'''
 
 
 class pdf:
