@@ -27,14 +27,14 @@ class index:
 <body>
 <h1>Hello, I Tweet As</h1>
 <form>
-<h2>Step 1: Calibrate the software</h2>
+<h2>Step 1: Calibrate the software (optional)</h2>
 <p>We strongly recommend that you calibrate the software using <a href="/calibrate">this PDF</a> before generating name tags. This step minimizes misprinted label sheets.</p>
 <p>Your fudge values</p>
 1.<input id="fudge_x" value="0"/> 2.<input id="fudge_y" value="0"/>
 <h2>Step 2: Generate your nametags</h3>
 <p>Enter your Twitter ID and we'll make a name tag for you!</p>
 @<input id="twitter_id"/>
-<h2>Tweak the layout</h2>
+<h2>Step 3: Tweak the layout (optional)</h2>
 <p>How many labels would you like to skip?</p>
 <input id="skip_n_labels" value="0"/><br/>
 <input type="submit" value="Make me a Twitter name tag!"/>
