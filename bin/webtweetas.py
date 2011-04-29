@@ -8,10 +8,12 @@ except ImportError, e:
     sys.exit(1)
 
 from itweetas import LabelBuilder, LabelFormat, TwitterUser
+from calibration import CalibrationPage
 
 
 urls = (
     '/', 'index',
+    '/calibrate', 'calibrate',
     '/(\d+)/([^/]+)/(-?\d+)/(-?\d+)/?', 'pdf'
     )
 
@@ -24,8 +26,13 @@ class index:
 
 <body>
 <h1>Hello, I Tweet As</h1>
-<p>Enter your Twitter ID and we'll make a name tag for you!</p>
 <form>
+<h2>Step 1: Calibrate the software</h2>
+<p>We strongly recommend that you calibrate the software using <a href="/calibrate">this PDF</a> before generating name tags. This step minimizes misprinted label sheets.</p>
+<p>Your fudge values</p>
+1.<input id="fudge_x" value="0"/> 2.<input id="fudge_y" value="0"/>
+<h2>Step 2: Generate your nametags</h3>
+<p>Enter your Twitter ID and we'll make a name tag for you!</p>
 @<input id="twitter_id"/><br/>
 <input type="submit" value="Make me a Twitter name tag!"/>
 </form>
@@ -33,7 +40,8 @@ class index:
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
 <script type="text/javascript">
 function submit_form(event) {
-  window.location = '/0/' + $('#twitter_id').val() + '/0/0/';
+  window.location = '/0/' + $('#twitter_id').val() +
+    '/' + $('#fudge_x').val() + '/' + $('#fudge_y').val() + '/';
   return false;
 }
 
@@ -54,6 +62,15 @@ $('form').submit(submit_form);
 </script>
 </html>
 '''
+
+
+class calibrate:
+    def GET(self):
+        calibrationPDF = CalibrationPage()
+
+        web.header('Content-Type', 'application/pdf')
+        web.header('Content-Disposition', 'attachment; filename="calibration.pdf"')
+        return format(calibrationPDF.getPDF())
 
 
 class pdf:
