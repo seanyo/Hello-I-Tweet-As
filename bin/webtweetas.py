@@ -33,14 +33,17 @@ class index:
 1.<input id="fudge_x" value="0"/> 2.<input id="fudge_y" value="0"/>
 <h2>Step 2: Generate your nametags</h3>
 <p>Enter your Twitter ID and we'll make a name tag for you!</p>
-@<input id="twitter_id"/><br/>
+@<input id="twitter_id"/>
+<h2>Tweak the layout</h2>
+<p>How many labels would you like to skip?</p>
+<input id="skip_n_labels" value="0"/><br/>
 <input type="submit" value="Make me a Twitter name tag!"/>
 </form>
 </body>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
 <script type="text/javascript">
 function submit_form(event) {
-  window.location = '/0/' + $('#twitter_id').val() +
+  window.location = '/' + $('#skip_n_labels').val() + '/' + $('#twitter_id').val() +
     '/' + $('#fudge_x').val() + '/' + $('#fudge_y').val() + '/';
   return false;
 }
