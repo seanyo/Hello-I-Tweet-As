@@ -81,7 +81,28 @@ $('#twitter_id').keypress(function(event) {
   }
 });
 
+$('input#fudge_x').blur(function() {
+  if (web_storage()) {
+    window.localStorage.setItem('fudge_x', $('input#fudge_x').val());
+  }
+});
+
+$('input#fudge_y').blur(function() {
+  if (web_storage()) {
+    window.localStorage.setItem('fudge_y', $('input#fudge_y').val());
+  }
+});
+
 $('form').submit(submit_form);
+
+// From http://diveintohtml5.org/storage.html
+function web_storage() {
+  try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
+}
 </script>
 
 <script type="text/javascript">
@@ -96,7 +117,20 @@ $('form').submit(submit_form);
     $('h2#layout_header').click(function() {
       $('div#layout').slideToggle();
     });
+
+    // Load fudge values from web storage
+    if (web_storage()) {
+      var x, y;
+
+      if (x = window.localStorage.getItem('fudge_x')) {
+        $('input#fudge_x').val(x);
+      }
+      if (y = window.localStorage.getItem('fudge_y')) {
+        $('input#fudge_y').val(y);
+      }
+    }
   });
+
 </script>
 </html>
 '''
