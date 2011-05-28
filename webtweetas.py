@@ -29,7 +29,7 @@ class index:
 <h1>Hello, I Tweet As</h1>
 <form>
 <div class="step">
-<h2 id="calibrate_header">Calibrate the software (optional)</h2>
+<h2 id="calibrate_header">Calibrate</h2>
 <div id="calibrate" class="collapse">
 <p>We strongly recommend that you calibrate the software using <a href="/calibrate">this PDF</a> before generating name tags. This step minimizes misprinted label sheets.</p>
 <p>Your fudge values</p>
@@ -37,20 +37,20 @@ class index:
 </div>
 </div>
 <div class="step">
-<h2>Generate your nametags</h3>
+<h2>Names</h2>
 <div id="handles" class="collapse">
-<p>Enter your Twitter ID and we'll make a name tag for you!</p>
+<p>Enter your Twitter ID for a single nametag</p>
 @<input id="twitter_id"/>
 </div>
 </div>
 <div class="step">
-<h2 id="layout_header">Tweak the layout (optional)</h2>
+<h2 id="layout_header">Layout</h2>
 <div id="layout" class="collapse">
 <p>How many labels would you like to skip?</p>
 <input id="skip_n_labels" value="0"/><br/>
 </div>
 </div>
-<input type="submit" value="Make me a Twitter name tag!"/>
+<input type="submit" value="Generate nametags"/>
 </form>
 </body>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
