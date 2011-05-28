@@ -1,0 +1,11 @@
+Options +ExecCGI
+AddHandler cgi-script .py
+
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  RewriteBase /
+  RewriteCond %{REQUEST_URI} !^/favicon.ico$
+  RewriteCond %{REQUEST_URI} !^/static/(.*)$
+  RewriteCond %{REQUEST_URI} !^(/.*)+webtweetas.py/
+  RewriteRule ^(.*)$ /webtweetas.py/$1 [L]
+</IfModule>

@@ -3,6 +3,10 @@
 from __future__ import division
 
 import math
+try:
+    from cStringIO import StringIO
+except ImportError, e:
+    from StringIO import StringIO
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
@@ -32,6 +36,52 @@ class CalibrationPage:
         self.measureLineLength = {CalibrationPage.METRIC: 4 * cm,
                                   CalibrationPage.IMPERIAL: 2 * inch}
         self.measureLinePlacement = 1 * inch
+
+        self.buffer = StringIO()
+        c = canvas.Canvas(self.buffer, pagesize=letter, bottomup=False)
+        c.setLineWidth(0.2)
+
+        c.setFont('Helvetica', 10)
+        c.rect((self.pageSize[0] - self.centreRectangle[0]) / 2,
+               (self.pageSize[1] - self.centreRectangle[1]) / 2,
+               self.centreRectangle[0], self.centreRectangle[1])
+
+        c.setFont('Helvetica', 7)
+        c.line(self.fudgeLinePlacement, 0, self.fudgeLinePlacement, self.fudgeLineLength)
+        c.line(self.fudgeLinePlacement - (self.fudgeLineCapLength / 2),
+               self.fudgeLineLength,
+               self.fudgeLinePlacement + (self.fudgeLineCapLength / 2),
+               self.fudgeLineLength)
+
+        c.line(0, self.pageSize[1] - self.fudgeLinePlacement,
+               self.fudgeLineLength, self.pageSize[1] - self.fudgeLinePlacement)
+        c.line(self.fudgeLineLength,
+               self.pageSize[1] - self.fudgeLinePlacement - (self.fudgeLineCapLength / 2),
+               self.fudgeLineLength,
+               self.pageSize[1] - self.fudgeLinePlacement + (self.fudgeLineCapLength / 2))
+
+        # Top measurement line, in inches
+        self.draw_ruler(c, (self.pageSize[0] - self.measureLineLength[CalibrationPage.IMPERIAL]) / 2,
+                     self.measureLinePlacement, self.measureLineLength[CalibrationPage.IMPERIAL],
+                     units = CalibrationPage.IMPERIAL)
+
+        # Bottom measurement line, in centimetres
+        self.draw_ruler(c, (self.pageSize[0] - self.measureLineLength[CalibrationPage.METRIC]) / 2,
+                     self.pageSize[1] - self.measureLinePlacement, self.measureLineLength[CalibrationPage.METRIC])
+
+        # Left measurement line, in inches
+        self.draw_ruler(c, self.measureLinePlacement,
+                     (self.pageSize[1] - self.measureLineLength[CalibrationPage.IMPERIAL]) / 2,
+                     self.measureLineLength[CalibrationPage.IMPERIAL], units=CalibrationPage.IMPERIAL,
+                     orientation=CalibrationPage.VERTICAL)
+
+        # Right measurement line, in centimetres
+        self.draw_ruler(c, self.pageSize[0] - self.measureLinePlacement,
+                     (self.pageSize[1] - self.measureLineLength[CalibrationPage.METRIC]) / 2,
+                     self.measureLineLength[CalibrationPage.METRIC], orientation=CalibrationPage.VERTICAL)
+
+        c.showPage()
+        c.save()
 
     def draw_ruler(self, canvas, x, y, length, orientation=HORIZONTAL,
                    units=METRIC):
@@ -73,50 +123,10 @@ class CalibrationPage:
 
         canvas.restoreState()
 
+    def getPDF(self):
+        return self.buffer.getvalue()
+
 
 if __name__ == '__main__':
-    c = canvas.Canvas('calibration.pdf', pagesize=letter, bottomup=False)
-    c.setLineWidth(0.2)
     p = CalibrationPage()
-
-    c.setFont('Helvetica', 10)
-    c.rect((p.pageSize[0] - p.centreRectangle[0]) / 2,
-           (p.pageSize[1] - p.centreRectangle[1]) / 2,
-           p.centreRectangle[0], p.centreRectangle[1])
-
-    c.setFont('Helvetica', 7)
-    c.line(p.fudgeLinePlacement, 0, p.fudgeLinePlacement, p.fudgeLineLength)
-    c.line(p.fudgeLinePlacement - (p.fudgeLineCapLength / 2),
-           p.fudgeLineLength,
-           p.fudgeLinePlacement + (p.fudgeLineCapLength / 2),
-           p.fudgeLineLength)
-
-    c.line(0, p.pageSize[1] - p.fudgeLinePlacement,
-           p.fudgeLineLength, p.pageSize[1] - p.fudgeLinePlacement)
-    c.line(p.fudgeLineLength,
-           p.pageSize[1] - p.fudgeLinePlacement - (p.fudgeLineCapLength / 2),
-           p.fudgeLineLength,
-           p.pageSize[1] - p.fudgeLinePlacement + (p.fudgeLineCapLength / 2))
-
-    # Top measurement line, in inches
-    p.draw_ruler(c, (p.pageSize[0] - p.measureLineLength[CalibrationPage.IMPERIAL]) / 2,
-                 p.measureLinePlacement, p.measureLineLength[CalibrationPage.IMPERIAL],
-                 units = CalibrationPage.IMPERIAL)
-
-    # Bottom measurement line, in centimetres
-    p.draw_ruler(c, (p.pageSize[0] - p.measureLineLength[CalibrationPage.METRIC]) / 2,
-                 p.pageSize[1] - p.measureLinePlacement, p.measureLineLength[CalibrationPage.METRIC])
-
-    # Left measurement line, in inches
-    p.draw_ruler(c, p.measureLinePlacement,
-                 (p.pageSize[1] - p.measureLineLength[CalibrationPage.IMPERIAL]) / 2,
-                 p.measureLineLength[CalibrationPage.IMPERIAL], units=CalibrationPage.IMPERIAL,
-                 orientation=CalibrationPage.VERTICAL)
-
-    # Right measurement line, in centimetres
-    p.draw_ruler(c, p.pageSize[0] - p.measureLinePlacement,
-                 (p.pageSize[1] - p.measureLineLength[CalibrationPage.METRIC]) / 2,
-                 p.measureLineLength[CalibrationPage.METRIC], orientation=CalibrationPage.VERTICAL)
-
-    c.showPage()
-    c.save()
+    print p.getPDF()
