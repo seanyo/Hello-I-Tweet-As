@@ -30,6 +30,14 @@ div.step {
   margin: 1em 0em;
   padding: 0.2em 1em;
 }
+h2#calibrate_header,
+h2#layout_header {
+  cursor: pointer
+}
+h2#calibrate_header:hover,
+h2#layout_header:hover {
+  background-color: #fff;
+}
 </style>
 </head>
 
