@@ -37,7 +37,7 @@ div.step {
 <h1>Hello, I Tweet As</h1>
 <form>
 <div class="step">
-<h2 id="calibrate_header">Step 1: Calibrate the software (optional)</h2>
+<h2 id="calibrate_header">Calibrate the software (optional)</h2>
 <div id="calibrate" class="collapse">
 <p>We strongly recommend that you calibrate the software using <a href="/calibrate">this PDF</a> before generating name tags. This step minimizes misprinted label sheets.</p>
 <p>Your fudge values</p>
@@ -45,14 +45,14 @@ div.step {
 </div>
 </div>
 <div class="step">
-<h2>Step 2: Generate your nametags</h3>
+<h2>Generate your nametags</h3>
 <div id="handles" class="collapse">
 <p>Enter your Twitter ID and we'll make a name tag for you!</p>
 @<input id="twitter_id"/>
 </div>
 </div>
 <div class="step">
-<h2 id="layout_header">Step 3: Tweak the layout (optional)</h2>
+<h2 id="layout_header">Tweak the layout (optional)</h2>
 <div id="layout" class="collapse">
 <p>How many labels would you like to skip?</p>
 <input id="skip_n_labels" value="0"/><br/>
