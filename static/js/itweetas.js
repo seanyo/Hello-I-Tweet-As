@@ -44,8 +44,8 @@ $(document).ready(function() {
   $('div#layout').hide();
 
   // Add expand/collapse button
-  $('div#calibrate').before('<img role="button" class="collapse" id="calibrate_collapse" src="static/images/fam/arrow_down.png"/>');
-  $('div#layout').before('<img role="button" class="collapse" id="layout_collapse" src="static/images/fam/arrow_down.png"/>');
+  $('div#calibrate').before('<img role="button" class="collapse" id="calibrate_collapse" alt="Expand / collapse calibration section" src="static/images/fam/arrow_down.png"/>');
+  $('div#layout').before('<img role="button" class="collapse" id="layout_collapse" alt="Expand / collapse layout section" src="static/images/fam/arrow_down.png"/>');
 
   $('img#calibrate_collapse').click(function() {
     $('div#calibrate').slideToggle(function() {
