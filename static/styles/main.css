@@ -27,6 +27,17 @@ div.step {
   padding: 0.2em 1em;
 }
 
+div.step h2,
+div.step p.optional {
+  display: inline;
+}
+
+div.step p.optional {
+  color: #333;
+  font-size: 80%;
+  font-style: italic;
+}
+
 div#header {
   background-color: #c11;
   border-radius: 11px 11px 0px 0px;
