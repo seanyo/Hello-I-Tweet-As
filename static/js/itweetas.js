@@ -43,12 +43,30 @@ $(document).ready(function() {
   $('div#calibrate').hide();
   $('div#layout').hide();
 
-  $('h2#calibrate_header').click(function() {
-    $('div#calibrate').slideToggle();
+  // Add expand/collapse button
+  $('div#calibrate').before('<img role="button" class="collapse" id="calibrate_collapse" src="static/images/fam/arrow_down.png"/>');
+  $('div#layout').before('<img role="button" class="collapse" id="layout_collapse" src="static/images/fam/arrow_down.png"/>');
+
+  $('img#calibrate_collapse').click(function() {
+    $('div#calibrate').slideToggle(function() {
+      if ($('div#calibrate').is(':visible')) {
+        $('img#calibrate_collapse').attr('src', 'static/images/fam/arrow_up.png');
+      }
+      else {
+        $('img#calibrate_collapse').attr('src', 'static/images/fam/arrow_down.png');
+      }
+    });
   });
 
-  $('h2#layout_header').click(function() {
-    $('div#layout').slideToggle();
+  $('img#layout_collapse').click(function() {
+    $('div#layout').slideToggle(function() {
+      if ($('div#layout').is(':visible')) {
+        $('img#layout_collapse').attr('src', 'static/images/fam/arrow_up.png');
+      }
+      else {
+        $('img#layout_collapse').attr('src', 'static/images/fam/arrow_down.png');
+      }
+    });
   });
 
   // Load fudge values from web storage
