@@ -43,11 +43,11 @@ $(document).ready(function() {
   $('div#calibrate').hide();
   $('div#layout').hide();
 
-  $('h2#calibrate_header').click(function() {
+  $('h3#calibrate_header').click(function() {
     $('div#calibrate').slideToggle();
   });
 
-  $('h2#layout_header').click(function() {
+  $('h3#layout_header').click(function() {
     $('div#layout').slideToggle();
   });
 
