@@ -54,6 +54,10 @@ h3#layout_header:hover {
   background-color: #fff;
 }
 
+input#submit {
+  margin-left: 20px;
+}
+
 div#footer {
   background-color: #c11;
   border-radius: 0px 0px 11px 11px;
