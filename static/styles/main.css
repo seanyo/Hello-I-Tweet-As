@@ -4,6 +4,7 @@
 }
 
 body {
+  background-color: #eee;
   margin-left: auto;
   margin-right: auto;
   max-width: 600px;
@@ -11,9 +12,10 @@ body {
 }
 
 div#container {
-  -moz-box-shadow: 0px 0px 11px #333;
-  -webkit-box-shadow: 0px 0px 11px #333;
-  box-shadow: 0px 0px 11px #333;
+  background-color: #fff;
+  -moz-box-shadow: 0px 0px 9px #666;
+  -webkit-box-shadow: 0px 0px 9px #666;
+  box-shadow: 0px 0px 11px #666;
   border-radius: 11px;
 }
 
