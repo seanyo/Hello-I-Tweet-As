@@ -11,6 +11,8 @@ from itweetas import LabelBuilder, LabelFormat, TwitterUser
 from calibration import CalibrationPage
 
 
+render = web.template.render('templates/')
+
 urls = (
     '/', 'index',
     '/calibrate', 'calibrate',
@@ -19,44 +21,7 @@ urls = (
 
 class index:
     def GET(self):
-        return '''<html>
-<head>
-<title>Hello, I tweet as...</title>
-<link rel="stylesheet" type="text/css" href="static/styles/main.css"></style>
-</head>
-
-<body>
-<h1>Hello, I Tweet As</h1>
-<form>
-<div class="step">
-<h2 id="calibrate_header">Calibrate</h2>
-<div id="calibrate" class="collapse">
-<p>We strongly recommend that you calibrate the software using <a href="/calibrate">this PDF</a> before generating name tags. This step minimizes misprinted label sheets.</p>
-<p>Your fudge values</p>
-1.<input id="fudge_x" value="0"/> 2.<input id="fudge_y" value="0"/>
-</div>
-</div>
-<div class="step">
-<h2>Names</h2>
-<div id="handles" class="collapse">
-<p>Enter your Twitter ID for a single nametag</p>
-@<input id="twitter_id"/>
-</div>
-</div>
-<div class="step">
-<h2 id="layout_header">Layout</h2>
-<div id="layout" class="collapse">
-<p>How many labels would you like to skip?</p>
-<input id="skip_n_labels" value="0"/><br/>
-</div>
-</div>
-<input type="submit" value="Generate nametags"/>
-</form>
-</body>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
-<script type="text/javascript" src="static/js/itweetas.js"></script>
-</html>
-'''
+        return render.index()
 
 
 class calibrate:
