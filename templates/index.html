@@ -11,6 +11,18 @@
 </div>
 <form>
 <div class="step">
+<h2 id="layout_header">Layout</h2>
+<p class="optional">(Optional)</p>
+<div id="layout" class="collapse">
+<label for="format">What label format are you using?</label>
+<select id="format">
+  <option>Avery #8395 / #5395 / #45395</option>
+</select>
+<p>How many labels would you like to skip?</p>
+<input id="skip_n_labels" value="0"/><br/>
+</div>
+</div>
+<div class="step">
 <h2 id="calibrate_header">Calibrate</h2>
 <p class="optional">(Optional)</p>
 <div id="calibrate" class="collapse">
@@ -24,14 +36,6 @@
 <div id="handles" class="collapse">
 <p>Enter your Twitter ID for a single nametag</p>
 @<input id="twitter_id"/>
-</div>
-</div>
-<div class="step">
-<h2 id="layout_header">Layout</h2>
-<p class="optional">(Optional)</p>
-<div id="layout" class="collapse">
-<p>How many labels would you like to skip?</p>
-<input id="skip_n_labels" value="0"/><br/>
 </div>
 </div>
 <input id="submit" type="submit" value="Generate nametags"/>
