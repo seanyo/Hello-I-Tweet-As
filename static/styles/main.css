@@ -46,6 +46,10 @@ div.collapse {
   padding: 0.5em 0.5em 0.5em 1em;
 }
 
+div.collapse p {
+  padding-bottom: 1em;
+}
+
 div#header {
   background-color: #c11;
   border-radius: 11px 11px 0px 0px;
