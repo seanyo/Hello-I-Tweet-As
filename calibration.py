@@ -64,21 +64,41 @@ class CalibrationPage:
         self.draw_ruler(c, (self.pageSize[0] - self.measureLineLength[CalibrationPage.IMPERIAL]) / 2,
                      self.measureLinePlacement, self.measureLineLength[CalibrationPage.IMPERIAL],
                      units = CalibrationPage.IMPERIAL)
+        c.drawCentredString(self.pageSize[0] // 2, self.measureLinePlacement - 0.4 * cm, '0"')
+        c.drawCentredString(self.pageSize[0] // 2 - 1 * inch, self.measureLinePlacement - 0.4 * cm, '-1"')
+        c.drawCentredString(self.pageSize[0] // 2 + 1 * inch, self.measureLinePlacement - 0.4 * cm, '1"')
+        c.drawString(self.pageSize[0] // 2 - 1 * inch, self.measureLinePlacement + 0.3 * cm, '1/32"')
 
         # Bottom measurement line, in centimetres
         self.draw_ruler(c, (self.pageSize[0] - self.measureLineLength[CalibrationPage.METRIC]) / 2,
                      self.pageSize[1] - self.measureLinePlacement, self.measureLineLength[CalibrationPage.METRIC])
+        c.drawCentredString(self.pageSize[0] // 2, self.pageSize[1] - self.measureLinePlacement - 0.4 * cm, '0 cm')
+        c.drawCentredString(self.pageSize[0] // 2 + 1 * cm, self.pageSize[1] - self.measureLinePlacement - 0.4 * cm, '1 cm')
+        c.drawCentredString(self.pageSize[0] // 2 + 2 * cm, self.pageSize[1] - self.measureLinePlacement - 0.4 * cm, '2 cm')
+        c.drawCentredString(self.pageSize[0] // 2 - 1 * cm, self.pageSize[1] - self.measureLinePlacement - 0.4 * cm, '-1 cm')
+        c.drawCentredString(self.pageSize[0] // 2 - 2 * cm, self.pageSize[1] - self.measureLinePlacement - 0.4 * cm, '-2 cm')
+        c.drawString(self.pageSize[0] // 2 - 2 * cm, self.pageSize[1] - self.measureLinePlacement + 0.3 * cm, '1 mm')
 
         # Left measurement line, in inches
         self.draw_ruler(c, self.measureLinePlacement,
                      (self.pageSize[1] - self.measureLineLength[CalibrationPage.IMPERIAL]) / 2,
                      self.measureLineLength[CalibrationPage.IMPERIAL], units=CalibrationPage.IMPERIAL,
                      orientation=CalibrationPage.VERTICAL)
+        c.drawString(self.measureLinePlacement + 0.4 * cm, self.pageSize[1] // 2, '0"')
+        c.drawString(self.measureLinePlacement + 0.4 * cm, self.pageSize[1] // 2 - 1 * inch, '-1"')
+        c.drawString(self.measureLinePlacement + 0.4 * cm, self.pageSize[1] // 2 + 1 * inch, '1"')
+        c.drawRightString(self.measureLinePlacement - 0.2 * cm, self.pageSize[1] // 2 - 1 * inch, '1/32"')
 
         # Right measurement line, in centimetres
         self.draw_ruler(c, self.pageSize[0] - self.measureLinePlacement,
                      (self.pageSize[1] - self.measureLineLength[CalibrationPage.METRIC]) / 2,
                      self.measureLineLength[CalibrationPage.METRIC], orientation=CalibrationPage.VERTICAL)
+        c.drawString(self.pageSize[0] - self.measureLinePlacement + 0.4 * cm, self.pageSize[1] // 2, '0 cm')
+        c.drawString(self.pageSize[0] - self.measureLinePlacement + 0.4 * cm, self.pageSize[1] // 2 - 1 * cm, '-1 cm')
+        c.drawString(self.pageSize[0] - self.measureLinePlacement + 0.4 * cm, self.pageSize[1] // 2 - 2 * cm, '-2 cm')
+        c.drawString(self.pageSize[0] - self.measureLinePlacement + 0.4 * cm, self.pageSize[1] // 2 + 1 * cm, '1 cm')
+        c.drawString(self.pageSize[0] - self.measureLinePlacement + 0.4 * cm, self.pageSize[1] // 2 + 2 * cm, '2 cm')
+        c.drawRightString(self.pageSize[0] - self.measureLinePlacement - 0.2 * cm, self.pageSize[1] // 2 - 2 * cm, '1 mm')
 
         c.showPage()
         c.save()
