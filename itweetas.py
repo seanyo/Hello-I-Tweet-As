@@ -125,8 +125,8 @@ class LabelBuilder:
         self.users.append(user)
 
     def setFudge(self, horizontal, vertical):
-        self.format.leftMargin += horizontal
-        self.format.topMargin += vertical
+        self.format.leftMargin += int(horizontal)
+        self.format.topMargin += int(vertical)
 
     def generatePDF(self, offset=0, showLabelBoundaries=False):
         c = self.canvas

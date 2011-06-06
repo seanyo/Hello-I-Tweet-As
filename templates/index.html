@@ -9,7 +9,7 @@
 <div id="header">
 <h1>Hello<br><span class="sub">I Tweet As</span></h1>
 </div>
-<form>
+<form action="/nametags" method="post">
 <div class="step">
 <h2 id="layout_header">Layout</h2>
 <p class="optional">(Optional)</p>
@@ -19,7 +19,7 @@
   <option>Avery #8395 / #5395 / #45395</option>
 </select><br>
 <label for="skip_n_labels">How many labels would you like to skip?</label>
-<input id="skip_n_labels" value="0"/><br/>
+<input id="skip_n_labels" name="offset" value="0"/><br/>
 </div>
 </div>
 <div class="step">
@@ -27,15 +27,15 @@
 <p class="optional">(Optional)</p>
 <div id="calibrate" class="collapse">
 <p>We strongly recommend that you calibrate the software using <a href="/calibrate">this PDF</a> before generating name tags. This step minimizes misprinted label sheets.</p>
-<label for="fudge_x">Horizontal adjustment: </label><input id="fudge_x" value="0"/><br>
-<label for="fudge_y">Vertical adjustment: </label><input id="fudge_y" value="0"/>
+<label for="fudge_x">Horizontal adjustment: </label><input id="fudge_x" name="fudge_x" value="0"/><br>
+<label for="fudge_y">Vertical adjustment: </label><input id="fudge_y" name="fudge_y" value="0"/>
 </div>
 </div>
 <div class="step">
 <h2>Names</h2>
 <div id="handles" class="collapse">
 <label for="twitter_id">Enter your Twitter ID for a single nametag: </label>
-@<input id="twitter_id"/>
+@<input id="twitter_id" name="users"/>
 </div>
 </div>
 <input id="submit" type="submit" value="Generate nametags"/>

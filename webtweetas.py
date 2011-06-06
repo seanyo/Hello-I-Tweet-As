@@ -16,7 +16,7 @@ render = web.template.render('templates/')
 urls = (
     '/', 'index',
     '/calibrate', 'calibrate',
-    '/(\d+)/([^/]+)/(-?\d+)/(-?\d+)/?', 'pdf'
+    '/nametags', 'pdf'
     )
 
 class index:
@@ -34,16 +34,19 @@ class calibrate:
 
 
 class pdf:
-    def GET(self, offset, users, fudge_x, fudge_y):
-        users = users.split(',')
+    def POST(self):
+        i = web.input()
+
+        users = i.users.split(',')
 
         builder = LabelBuilder(LabelFormat())
-        builder.setFudge(int(fudge_x), int(fudge_y))
+        # TODO: Try/catch here for invalid fudge values
+        builder.setFudge(i.fudge_x, i.fudge_y)
 
         for user in users:
             builder.addUser(TwitterUser(user))
 
-        builder.generatePDF(offset=int(offset))
+        builder.generatePDF(offset=int(i.offset))
 
         web.header('Content-Type', 'application/pdf')
         web.header('Content-Disposition', 'attachment; filename="nametags.pdf"')
