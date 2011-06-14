@@ -38,6 +38,7 @@ class pdf:
         i = web.input()
 
         users = i.users.split(',')
+        users = map(lambda x: x.strip(), users)
 
         builder = LabelBuilder(LabelFormat())
         # TODO: Try/catch here for invalid fudge values
