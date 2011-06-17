@@ -4,6 +4,7 @@
 }
 
 body {
+  font-family: sans-serif;
   background-color: #eee;
   margin-left: auto;
   margin-right: auto;
@@ -17,6 +18,7 @@ div#warning {
   box-shadow: 0px 0px 11px #666;
   color: #fff;
   font-weight: bold;
+  font-size: 90%;
   margin-bottom: 1em;
   padding: 1em;
 }
@@ -43,7 +45,12 @@ div.step {
   border: 1px solid #ccc;
   border-radius: 7px;
   margin: 1em;
-  padding: 0.2em 0.2em 0.2em 1em;
+  padding: 0.5em 0.5em 0.5em 1em;
+  line-height: 2em;
+}
+
+div.step p{
+  line-height: 1em;
 }
 
 div.step h2,
@@ -94,6 +101,7 @@ img.collapse {
 
 input#submit {
   margin-left: 20px;
+  padding: 2px 10px;
 }
 
 div#footer {
