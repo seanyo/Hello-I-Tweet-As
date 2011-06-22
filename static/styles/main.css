@@ -37,12 +37,29 @@ div#login_logout {
   box-shadow: 0px 0px 11px #666;
   color: #fff;
   margin-bottom: 1em;
+  overflow: hidden;
   padding: 1em;
-  text-align: right;
+}
+
+div#login_logout p {
+  float: left;
 }
 
 div#login_logout a {
   color: #fff;
+}
+
+div#why {
+  float: right;
+  font-size: 80%;
+  max-width: 70%;
+  text-align: right;
+}
+
+div#why dt {
+  cursor: pointer;
+  font-style: italic;
+  text-decoration: underline;
 }
 
 div#container {

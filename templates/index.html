@@ -16,7 +16,13 @@ $def with (user)
 $if user != '':
     You are logged in as $user. <a href="/logout">Log out</a>
 $else:
-    <a href="/login">Log in with Twitter</a>
+    <p><a href="/login">Log in with Twitter</a></p>
+    <div id="why">
+      <dl>
+        <dt>Why?</dt>
+        <dd>Twitter imposes significant usage limits on unauthenticated use of its API. When you log in we can make requests on your behalf and generate nametags much more efficiently.</dd>
+      </dl>
+    </div>
 </div>
 <div id="container">
 <div id="header">

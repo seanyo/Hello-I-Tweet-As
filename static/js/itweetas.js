@@ -22,6 +22,7 @@ function web_storage() {
 $(document).ready(function() {
   $('div#calibrate').hide();
   $('div#layout').hide();
+  $('#why dd').hide();
 
   // Add expand/collapse button
   $('div#calibrate').before('<img role="button" class="collapse" id="calibrate_collapse" alt="Expand / collapse calibration section" src="static/images/fam/arrow_down.png"/>');
@@ -47,6 +48,10 @@ $(document).ready(function() {
         $('img#layout_collapse').attr('src', 'static/images/fam/arrow_down.png');
       }
     });
+  });
+
+  $('#why dt').click(function(){
+    $('#why dd').slideToggle();
   });
 
   // Load fudge values from web storage
