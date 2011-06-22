@@ -31,6 +31,20 @@ div#warning p {
   margin-top: 1em;
 }
 
+div#login_logout {
+  background-color: #369;
+  border-radius: 11px;
+  box-shadow: 0px 0px 11px #666;
+  color: #fff;
+  margin-bottom: 1em;
+  padding: 1em;
+  text-align: right;
+}
+
+div#login_logout a {
+  color: #fff;
+}
+
 div#container {
   background-color: #fff;
   -moz-box-shadow: 0px 0px 9px #666;

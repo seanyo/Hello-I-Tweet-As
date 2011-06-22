@@ -1,3 +1,4 @@
+$def with (user)
 <html>
 <head>
 <title>Hello, I tweet as...</title>
@@ -10,6 +11,12 @@
 <p>This website is pre-Beta. In fact, it's pre-Alpha. We are still developing ITweet.As, and you shouldn't rely on it in any way. Seriously.</p>
 <p>Having said that, if it works for you, great! We hope you find it useful!</p>
 <p>Please feel free to <a href="http://twitter.com/itweetas">contact us on Twitter</a> or contribute code and bug reports <a href="https://github.com/seanyo/Hello-I-Tweet-As/">on GitHub</a>.</p>
+</div>
+<div id="login_logout">
+$if user != '':
+    You are logged in as $user. <a href="/logout">Log out</a>
+$else:
+    <a href="/login">Log in with Twitter</a>
 </div>
 <div id="container">
 <div id="header">
