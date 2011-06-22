@@ -31,7 +31,7 @@ urls = (
 class index:
     def GET(self):
         user = ''
-        if hasattr(session, 'oauth_token'):
+        if hasattr(session, 'access_token'):
             user = session.access_token['screen_name']
         return render.index(user=user)
 
@@ -63,6 +63,7 @@ class login:
         client = oauth.Client(consumer)
 
         if hasattr(i, 'oauth_token') and hasattr(i, 'oauth_verifier'):
+            # We're back from Twitter with a successful authentication
             token = oauth.Token(i.oauth_token,
                                 session.oauth_token_secret)
             token.set_verifier(i.oauth_verifier)
@@ -73,7 +74,13 @@ class login:
 
             raise web.seeother('/')
 
+        elif hasattr(i, 'denied'):
+            # We're back from Twitter but were not granted access
+            # TODO: Report the error somehow
+            raise web.seeother('/')
+
         else:
+            # We need to send our authorization request out to Twitter
             resp, content = client.request(request_token_url, "GET")
             if resp['status'] != '200':
                 raise Exception("Invalid response %s." % resp['status'])
