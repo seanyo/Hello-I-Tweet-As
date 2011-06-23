@@ -33,9 +33,13 @@ class TwitterUser:
             self.userName = user[u'screen_name']  # Capitalization may change
             self.name = user[u'name']
             self.location = user[u'location']
+            if self.location is None:
+                self.location = ''
             self.avatarUrl = \
                 user[u'profile_image_url'].replace('normal', 'bigger')
             self.description = user[u'description']
+            if self.description is None:
+                self.description = ''
             self.verified = user[u'verified']
 
 
