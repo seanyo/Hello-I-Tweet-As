@@ -46,6 +46,11 @@ div.step {
   margin: 1em;
   padding: 0.5em 0.5em 0.5em 1em;
   line-height: 2em;
+
+  /* Kludge to make the expand/collapse arrows stay within the parent div on
+     (at least) Opera 11 Desktop on Linux and Opera 11 Mobile on Android. The
+     arrow is still rendering too low, but at least it's within the div. */
+  overflow: hidden;
 }
 
 div.step p{
