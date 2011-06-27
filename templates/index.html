@@ -1,4 +1,4 @@
-$def with (user)
+$def with (user, errors)
 <html>
 <head>
 <title>Hello, I tweet as...</title>
@@ -12,6 +12,12 @@ $def with (user)
 <p>Having said that, if it works for you, great! We hope you find it useful!</p>
 <p>Please feel free to <a href="http://twitter.com/itweetas">contact us on Twitter</a> or contribute code and bug reports <a href="https://github.com/seanyo/Hello-I-Tweet-As/">on GitHub</a>.</p>
 </div>
+$ error_count = 0
+$for error in errors:
+    <div class="error" id="error-$error_count">
+      <p>Error: $error</p>
+    </div>
+    $ error_count += 1
 <div id="login_logout">
 $if user != '':
     You are logged in as $user. <a href="/logout">Log out</a>

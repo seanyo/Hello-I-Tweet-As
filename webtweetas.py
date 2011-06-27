@@ -33,7 +33,9 @@ class index:
         user = ''
         if hasattr(session, 'access_token'):
             user = session.access_token['screen_name']
-        return render.index(user=user)
+        errors = session.errors
+        session.errors = []
+        return render.index(user=user, errors=errors)
 
 
 class calibrate:
@@ -77,6 +79,7 @@ class login:
         elif hasattr(i, 'denied'):
             # We're back from Twitter but were not granted access
             # TODO: Report the error somehow
+            session.errors.append('Failed to log in with Twitter')
             raise web.seeother('/')
 
         else:
@@ -123,7 +126,7 @@ class pdf:
 
 app = web.application(urls, globals())
 session = web.session.Session(app, web.session.DiskStore('sessions'),
-                              initializer={'user': None})
+                              initializer={'user': None, 'errors': []})
 
 
 if __name__ == '__main__':

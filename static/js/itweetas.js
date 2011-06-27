@@ -54,6 +54,10 @@ $(document).ready(function() {
     $('#why dd').slideToggle();
   });
 
+  $('div.error').click(function() {
+    $(this).fadeOut();
+  });
+
   // Load fudge values from web storage
   if (web_storage()) {
     var x, y;
