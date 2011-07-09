@@ -19,7 +19,7 @@ $for error in errors:
     </div>
     $ error_count += 1
 <div id="login_logout">
-$if user != '':
+$if user != '' and user is not None:
     You are logged in as $user. <a href="/logout">Log out</a>
 $else:
     <p><a href="/login">Log in with Twitter</a></p>

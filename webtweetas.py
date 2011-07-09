@@ -11,7 +11,7 @@ except ImportError, e:
 
 import oauth2 as oauth
 
-from itweetas import LabelBuilder, LabelFormat, TwitterUser
+from itweetas import LabelBuilder, LabelFormat, TwitterAPI, TwitterUser
 from calibration import CalibrationPage
 
 
@@ -28,14 +28,29 @@ urls = (
     '/nametags', 'pdf'
     )
 
+def getTwitterAPI():
+    config = ConfigParser.ConfigParser()
+    config.read('itweetas.cfg')
+
+    consumer_key = config.get('oauth', 'consumer_key')
+    consumer_secret = config.get('oauth', 'consumer_secret')
+
+    user = ''
+    if hasattr(session, 'access_token'):
+        user = session.user
+        t = TwitterAPI(consumer_key, consumer_secret, session.access_token)
+    else:
+        t = TwitterAPI(consumer_key, consumer_secret)
+
+    return t
+
+
 class index:
     def GET(self):
-        user = ''
-        if hasattr(session, 'access_token'):
-            user = session.access_token['screen_name']
+        t = getTwitterAPI()
         errors = session.errors
         session.errors = []
-        return render.index(user=user, errors=errors)
+        return render.index(user=session.user, errors=errors)
 
 
 class calibrate:
@@ -72,7 +87,10 @@ class login:
             client = oauth.Client(consumer, token)
 
             resp, content = client.request(access_token_url, "POST")
-            session.access_token = dict(urlparse.parse_qsl(content))
+            data = dict(urlparse.parse_qsl(content))
+            session.user = data['screen_name']
+            session.access_token = oauth.Token(data['oauth_token'],
+                                               data['oauth_token_secret'])
 
             raise web.seeother('/')
 
@@ -110,12 +128,16 @@ class pdf:
         users = i.users.split(',')
         users = map(lambda x: x.strip(), users)
 
+        # Load the users from Twitter
+        t = getTwitterAPI()
+        users = t.get_users(users)
+
         builder = LabelBuilder(LabelFormat())
         # TODO: Try/catch here for invalid fudge values
         builder.setFudge(i.fudge_x, i.fudge_y)
 
         for user in users:
-            builder.addUser(TwitterUser(user))
+            builder.addUser(user)
 
         builder.generatePDF(offset=int(i.offset))
 
