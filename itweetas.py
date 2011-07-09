@@ -45,20 +45,31 @@ class TwitterAPI:
         users = []
 
         if self.is_logged_in():
-            url = 'https://api.twitter.com/1/users/lookup.json?screen_name={0}&include_entities=0&skip_status=1'.format(','.join(userNames))
-            resp, content = self._client().request(url)
-            if resp['status'] == '200':
-                data = json.loads(content)
-                for user in data:
-                    users.append(
-                        TwitterUser(user[u'screen_name'],
-                                    user[u'name'],
-                                    user[u'location'],
-                                    user[u'profile_image_url'],
-                                    user[u'description'],
-                                    user[u'verified']))
-            else:
-                print 'Nope: {0}'.format(resp['status'])
+            baseUrl = 'https://api.twitter.com/1/users/lookup.json?screen_name={0}&include_entities=0&skip_status=1'
+
+            start = 0
+            perCall = 100
+            while start < len(userNames):
+                end = min(len(userNames) - start, perCall) + start
+
+                url = baseUrl.format(','.join(userNames[start:end]))
+
+                resp, content = self._client().request(url)
+                if resp['status'] == '200':
+                    data = json.loads(content)
+                    for user in data:
+                        users.append(
+                            TwitterUser(user[u'screen_name'],
+                                        user[u'name'],
+                                        user[u'location'],
+                                        user[u'profile_image_url'],
+                                        user[u'description'],
+                                        user[u'verified']))
+                else:
+                    print 'Nope: {0}'.format(resp['status'])
+
+                start += perCall
+
         else:
             baseUrl = 'https://api.twitter.com/1/users/show/{0}.json'
             for user in userNames:
