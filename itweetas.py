@@ -163,10 +163,15 @@ class LabelBuilder:
 
         if maxLines is not None and maxLines < len(lines):
             lines = lines[:maxLines]
-            while canvas.stringWidth(lines[maxLines-1] + append) > maxWidth:
+            while canvas.stringWidth(lines[-1] + append) > maxWidth:
                 # Remove words from the end until there's room for "..."
-                lines[maxLines-1] = lines[maxLines-1].rsplit(' ', 1)[0]
-            lines[maxLines-1] += append
+                newline = lines[maxLines-1].rsplit(' ', 1)[0]
+                if newline == lines[maxLines-1]:
+                    lines.pop()
+                else:
+                    lines[-1] = newline
+
+            lines[-1] += append
 
         return lines
 
