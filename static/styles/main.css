@@ -23,7 +23,7 @@ div.error {
   padding: 1em;
 }
 
-div#warning {
+div#broadcast {
   background-color: #000;
   border-radius: 11px;
   box-shadow: 0px 0px 11px #666;
@@ -34,11 +34,11 @@ div#warning {
   padding: 1em;
 }
 
-div#warning a {
+div#broadcast a {
   color: #fff;
 }
 
-div#warning p {
+div#broadcast p {
   margin-top: 1em;
 }
 

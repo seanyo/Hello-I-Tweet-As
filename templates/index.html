@@ -1,4 +1,4 @@
-$def with (user, errors)
+$def with (user, broadcast, errors)
 <html>
 <head>
 <title>Hello, I tweet as...</title>
@@ -6,12 +6,10 @@ $def with (user, errors)
 </head>
 
 <body>
-<div id="warning">
-<h2>Important note</h2>
-<p>This website is pre-Beta. In fact, it's pre-Alpha. We are still developing ITweet.As, and you shouldn't rely on it in any way. Seriously.</p>
-<p>Having said that, if it works for you, great! We hope you find it useful!</p>
-<p>Please feel free to <a href="http://twitter.com/itweetas">contact us on Twitter</a> or contribute code and bug reports <a href="https://github.com/seanyo/Hello-I-Tweet-As/">on GitHub</a>.</p>
-</div>
+$if broadcast != '' and broadcast is not None:
+    <div id="broadcast">
+      $:broadcast
+    </div>
 $ error_count = 0
 $for error in errors:
     <div class="error" id="error-$error_count">

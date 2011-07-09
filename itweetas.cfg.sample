@@ -1,3 +1,6 @@
+[general]
+broadcast:
+
 [oauth]
 consumer_key: Replace-Me
 consumer_secret: Replace-Me

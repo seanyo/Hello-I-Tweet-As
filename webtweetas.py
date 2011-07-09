@@ -47,10 +47,17 @@ def getTwitterAPI():
 
 class index:
     def GET(self):
+        config = ConfigParser.ConfigParser()
+        config.read('itweetas.cfg')
+
+        broadcast = config.get('general', 'broadcast')
+
         t = getTwitterAPI()
         errors = session.errors
         session.errors = []
-        return render.index(user=session.user, errors=errors)
+        return render.index(user=session.user,
+                            broadcast=broadcast,
+                            errors=errors)
 
 
 class calibrate:
