@@ -13,34 +13,106 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.lib.utils import ImageReader
 
+import oauth2 as oauth
+
+
+class TwitterAPI:
+    '''A class to handle communication with Twitter.'''
+
+    def __init__(self, consumer_key, consumer_secret, access_token=None):
+        self.consumer_key = consumer_key
+        self.consumer_secret = consumer_secret
+        self.access_token = access_token
+
+    def is_logged_in(self):
+        return self.access_token is not None
+
+    def _client(self):
+        consumer = oauth.Consumer(self.consumer_key, self.consumer_secret)
+        if self.is_logged_in():
+            return oauth.Client(consumer, self.access_token)
+        return oauth.Client(consumer)
+
+    def rate_limit_status(self):
+        url = 'https://api.twitter.com/1/account/rate_limit_status.json'
+        resp, content = self._client().request(url)
+        if resp['status'] != '200':
+            return None
+        else:
+            return content
+
+    def get_users(self, userNames):
+        users = []
+
+        if self.is_logged_in():
+            baseUrl = 'https://api.twitter.com/1/users/lookup.json?screen_name={0}&include_entities=0&skip_status=1'
+
+            start = 0
+            perCall = 100
+            while start < len(userNames):
+                end = min(len(userNames) - start, perCall) + start
+
+                url = baseUrl.format(','.join(userNames[start:end]))
+
+                resp, content = self._client().request(url)
+                if resp['status'] == '200':
+                    data = json.loads(content)
+                    for user in data:
+                        users.append(
+                            TwitterUser(user[u'screen_name'],
+                                        user[u'name'],
+                                        user[u'location'],
+                                        user[u'profile_image_url'],
+                                        user[u'description'],
+                                        user[u'verified']))
+                else:
+                    print 'Nope: {0}'.format(resp['status'])
+
+                start += perCall
+
+        else:
+            baseUrl = 'https://api.twitter.com/1/users/show/{0}.json'
+            for user in userNames:
+                url = baseUrl.format(user)
+                resp, content = self._client().request(url)
+                if resp['status'] == '200':
+                    data = json.loads(content)
+                    users.append(
+                        TwitterUser(data[u'screen_name'],
+                                    data[u'name'],
+                                    data[u'location'],
+                                    data[u'profile_image_url'],
+                                    data[u'description'],
+                                    data[u'verified']))
+                else:
+                    # TODO: Handle this
+                    print '[{0}] {1}: {2}'.format(url, resp, content)
+
+        return users
+
 
 class TwitterUser:
-    twitterHost = 'api.twitter.com'
-    twitterPort = 80
 
-    def __init__(self, userName):
+    def __init__(self, userName, name='', location='', avatarUrl='',
+                 description='', verified=False):
         self.userName = userName
-        self.sync()
+        self.name = name
+        self.location = location
+        self.avatarUrl = avatarUrl
+        self.description = description
+        self.verified = verified
 
-    def sync(self):
-        conn = httplib.HTTPConnection(TwitterUser.twitterHost)
-        request = '/1/users/show/{0}.json'.format(self.userName)
-        conn.request('GET', request)
-        response = conn.getresponse()
+        self.clean_up()
 
-        if response.status == 200:
-            user = json.loads(response.read())
-            self.userName = user[u'screen_name']  # Capitalization may change
-            self.name = user[u'name']
-            self.location = user[u'location']
-            if self.location is None:
-                self.location = ''
-            self.avatarUrl = \
-                user[u'profile_image_url'].replace('normal', 'bigger')
-            self.description = user[u'description']
-            if self.description is None:
-                self.description = ''
-            self.verified = user[u'verified']
+    def clean_up(self):
+        if self.location is None:
+            self.location = ''
+        if self.avatarUrl is None:
+            self.avatarUrl = ''
+        else:
+            self.avatarUrl = self.avatarUrl.replace('normal', 'bigger')
+        if self.description is None:
+            self.description = ''
 
 
 class LabelFormat:
@@ -91,10 +163,15 @@ class LabelBuilder:
 
         if maxLines is not None and maxLines < len(lines):
             lines = lines[:maxLines]
-            while canvas.stringWidth(lines[maxLines-1] + append) > maxWidth:
+            while canvas.stringWidth(lines[-1] + append) > maxWidth:
                 # Remove words from the end until there's room for "..."
-                lines[maxLines-1] = lines[maxLines-1].rsplit(' ', 1)[0]
-            lines[maxLines-1] += append
+                newline = lines[maxLines-1].rsplit(' ', 1)[0]
+                if newline == lines[maxLines-1]:
+                    lines.pop()
+                else:
+                    lines[-1] = newline
+
+            lines[-1] += append
 
         return lines
 
