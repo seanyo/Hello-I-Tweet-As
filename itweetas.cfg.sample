@@ -1,6 +1,9 @@
 [general]
 broadcast:
 
+# If you want to enable Google Analytics, put your key here
+ga_profile_id:
+
 [oauth]
 consumer_key: Replace-Me
 consumer_secret: Replace-Me

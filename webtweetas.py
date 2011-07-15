@@ -51,13 +51,15 @@ class index:
         config.read('itweetas.cfg')
 
         broadcast = config.get('general', 'broadcast')
+        ga_profile_id = config.get('general', 'ga_profile_id')
 
         t = getTwitterAPI()
         errors = session.errors
         session.errors = []
         return render.index(user=session.user,
                             broadcast=broadcast,
-                            errors=errors)
+                            errors=errors,
+                            ga_profile_id = ga_profile_id)
 
 
 class calibrate:
